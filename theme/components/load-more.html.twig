@@ -1,0 +1,24 @@
+{{ getCDN([ 'swagg/services/loadmore' ], 'js') }}
+
+<div class="dp-table mg-auto text-center">
+    <br><br>
+    {% if arg.items.getPaginationData().next is defined %}
+        <a data-loadmore-btn="loadmore__btn" class="data-loadmore-btn btn bttn bttn-primary">Charger plus {{ (arg.arrow ?? '&darr;')|raw }}</a>
+    {% endif %}
+    {% set knpStructure = knp_pagination_render(arg.items, getKnpTplPath()) %}
+    <div data-loadmore-pagination class="data-loadmore-pagination hidden_">{{ knpStructure|raw }}</div>
+</div>
+
+<style>
+    .data-loadmore-pagination nav { display: table; margin: auto }
+</style>
+
+<script>
+    AddScript(function(){
+        LoadMore.init({
+            onUpdated: function (updated) {
+                LazyLoading.init();
+            }
+        });
+    });
+</script>

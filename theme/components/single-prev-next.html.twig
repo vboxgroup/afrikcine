@@ -1,0 +1,47 @@
+{% set post = getPost() %}
+{% set prev = attr(post, 'prev') %}
+{% set next = attr(post, 'next') %}
+{% macro attr(post, direction, classNames) %}
+    {{- (' class="cell '~(classNames ?? '')~'" href="'~getPostHref(post)~'" title="Article '~ direction ~': '~attr(post, 'title')~'"')|raw -}}
+{% endmacro %}
+{% macro figure(post) %}
+    <figure>{{ image(post.title, post.image, 150, 74, 'c', 'img-responsive')|raw }}</figure>
+{% endmacro %}
+
+{% if prev or next %}
+    <footer class="single-prev-next">
+        <div class="cell-container cells-sm-broken">
+
+            {% if prev %}
+                <a{{ _self.attr(prev, 'précédent', 'cell cell-left cell-50 text-right') }}>
+                    <div class="cell-container">
+                        <span class="cell cell-outter"></span>
+                        <span class="cell cell-use-space">&larr;</span>
+                        <span class="cell cell-spacer-10"></span>
+                        <h4 class="cell title cell-39">{{ attr(prev, 'title') }}</h4>
+                        <span class="cell cell-spacer-10"></span>
+                        <span class="cell cell-use-space">{{ _self.figure(prev) }}</span>
+                    </div>
+                </a>
+            {% else  %}
+                <div class="cell cell-left cell-50"></div>
+            {% endif  %}
+
+            {% if next %}
+                <a{{ _self.attr(next, 'suivant', 'cell cell-right cell-50') }}>
+                    <div class="cell-container">
+                        <span class="cell cell-use-space">{{ _self.figure(next) }}</span>
+                        <span class="cell cell-spacer-10"></span>
+                        <h4 class="cell title cell-39">{{ attr(next, 'title') }}</h4>
+                        <span class="cell cell-spacer-10"></span>
+                        <span class="cell cell-use-space">&rarr;</span>
+                        <span class="cell cell-outter"></span>
+                    </div>
+                </a>
+            {% else  %}
+                <div class="cell cell-right cell-50"></div>
+            {% endif  %}
+
+        </div>
+    </footer>
+{% endif %}

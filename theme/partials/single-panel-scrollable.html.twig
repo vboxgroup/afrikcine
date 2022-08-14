@@ -1,0 +1,60 @@
+{% set currUrl = getCurrentUrlParamsLess() %}
+
+<nav id="single_panel_scrollable" class="singlePanelScrollable">
+    <a data-js="singlePanelScrollable={click:toggle}" href="{{currUrl}}?panel=index" class="active"><i class="fa fa-home"></i></a>
+    {% for item in items %}
+        <a data-js="singlePanelScrollable={click:toggle}" href="{{currUrl}}?panel={{getSlug(item)}}">{{item}}</a>
+    {% endfor %}
+</nav>
+
+<script>
+    AddScript(function(){
+
+        window.SinglePanelScrollable = {
+            init: function(params){
+                params = $.extend({
+                    targetsClassNames : ''
+                }, params);
+                this.params = params;
+                this.bindDataJs();
+                this.onPageLoaded();
+            },
+            onPageLoaded: function(){
+                this.activePanel(__.getCurrentHref());
+            },
+            bindDataJs: function(){
+                var self = this;
+                __.dataJs({
+                    singlePanelScrollable: {
+                        toggle: function($t){
+                            self.activePanel($t.attr('href'));
+                        }
+                    }
+                })
+            },
+            activePanel(href){
+                var self = this;
+                if(href.indexOf('panel')!==-1){
+                    Ajaxify.pushState(href);
+                    //
+                    var panel = __.getUrlVar('panel'),
+                        $targets = $(self.params.targetsClassNames),
+                        $target = $('#panel_target_'+panel);
+                    //
+                    $('a[href*="panel='+panel+'"]').siblings().removeClass('active').end().addClass('active');
+                    $targets.addClass('hidden');
+                    $target.removeClass('hidden');
+                    //
+                    __.scrollTop({
+                        val: $('#single_panel_scrollable').offset().top - 130,
+                        delay: 0
+                    });
+                }
+            }
+        };
+
+        SinglePanelScrollable.init({
+            targetsClassNames: '.panel-target-single'
+        });
+    })
+</script>

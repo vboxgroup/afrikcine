@@ -1,0 +1,14 @@
+{% import 'imports/macros.html.twig' as macros %}
+
+{% set post = getPost() %}
+
+<div class="single-body">
+    <div class="content">{{ (body ?? getBody("<div sg-text-rich>Je suis le contenu de l'article</div>", true))|raw }}</div>
+    <footer class="hidden">
+        <div class="cell-container container-share">
+            <div class="cell cell-use-space">Partager :</div>
+            <div class="cell cell-spacer-20"></div>
+            <div class="cell">{{ macros.share({ 'href': attr(post, '_href'), 'title': 'cet article' }) }}</div>
+        </div>
+    </footer>
+</div>

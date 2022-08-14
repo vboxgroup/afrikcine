@@ -1,0 +1,34 @@
+{% set photosLink = getPostHref(item)~'?panel=photos&scrolltop' %}
+{% set videosLink = getPostHref(item)~'?panel=videos&scrolltop' %}
+{% set href = getPostHref(item)~'?panel=saisons-et-episodes&view=saison' %}
+{% set eps = attr(item, 'episodes') %}
+{% set epsCount = eps|length %}
+{% set s = epsCount>1?'s':'' %}
+{% set photos = [] %}
+{% set videos = [] %}
+{% for ep in eps %}
+    {% set photos = photos|merge(getMedia(ep, 'photos').photos) %}
+    {% set videos = videos|merge(getMedia(ep, 'videos').videos) %}
+{% endfor %}
+
+<article class="saison-single-card">
+    <div class="d-flex space-between">
+        <figure>{{ image(item.title, attr(item, 'image', post.image ?? ''), 147, 196, 'c', 'img-thumb img-responsive')|raw }}</figure>
+        <div class="meta flex-2">  
+            <h3 class="title-gray text-uppercase mt-0">Synopsis</h3>
+            <p class="synopsis c-white">{{ item.description }}</p>
+        </div>
+        <div class="meta flex-2 max-w">  
+            <h3 class="title-gray text-uppercase mt-0">Infos saison {{ acf(item, 'props.numero_de_la_saison') }}</h3>
+            <div class="c-white">
+                <p>{{epsCount}} épisode{{s}}</p>
+                <p>Diffusée à partir de : {{ acf(item, 'props.annee_de_depart_de_diffusion') }}</p>
+                <p>
+                    <a data-js="singlePanelScrollable={click:toggle}" href="{{photosLink}}" class="c-s-dark">{{photos|length}} photos</a>
+                    |
+                    <a data-js="singlePanelScrollable={click:toggle}" href="{{videosLink}}" class="c-s-dark">{{videos|length}} vidéos</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</article>

@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+{% block main %}
+
+{{ s('hero', {data:{items: attr(pop(findAcf('diapo', 1)), 'films')}}) }}
+
+<div class="container-fluid mainContainerFluid">
+
+    <div class="row">
+
+        <div class="col-md-8">
+            {{ s('__films-a-venir',{data:getData('films-a-venir', 7), cls:'mb-30'}) }}
+            {{ s('__serie-a-la-tv',{data:getData('serie', 7), cls:'mb-30'}) }}
+            {{ s('__dernieres-bandes-annonces') }}
+        </div>
+
+        <div class="col-md-4">
+            {{ s('__afrikcine-en-continue') }}
+            {{ s('flyer--portrait-lg') }}
+        </div>
+        
+    </div>
+    
+    {{ s('__news', {data:getData('news', 6) }) }}
+    
+    <div class="row">
+        <div class="col-md-12 mt-20">{{ s('flyer--landscape') }}</div>
+    </div>
+
+    {{ s('__emissions', {data:getData('emission', 6) }) }}
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,5 @@
+{% set children = orderBy(attr(item, 'children'), 'rank') %}
+{% set desc = attr(item, 'description') %}
+{% set href = attr(item, 'href') %}
+
+<li><a href="{{href}}" class="{{ (item.isActive is defined ? 'active' : '') }}">{{ item.title }}</a></li>

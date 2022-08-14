@@ -1,0 +1,15 @@
+<div class="no-match">
+    <div class="mb-20">{{ i('ant-design:file-search-outlined') }}</div>
+    <h2 class="title mb-20">{{title??'Aucune correspondance trouvée'}}</h2>
+    {% if content is defined %}
+        {{ content|raw }}
+    {% else %}
+        <p>Vos critères de recherche n'ont aboutits à aucun élément dans nos bases de donnés.</p>
+        <p>Voici quelques conseils :</p>
+        <ul>
+            <li><a href="#"><u>Utiliser la barre de recherche</u></a> tout en haut du site</li>
+            <li>Croiser un ou deux critères à la fois</li>
+        </ul>
+        <a href="{{getCurrentUrlParamsLess()}}" class="btn bttn-primary mt-30">&larr; Tout afficher</a>
+    {% endif %}
+</div>

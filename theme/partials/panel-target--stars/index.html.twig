@@ -1,0 +1,140 @@
+{# Biograpgie #}
+<section class="panel-target mt-20 mb-20">
+    <header><h2 class="panel-main-title linear-g-title mt-5">Biograghie</h2></header>
+    <div class="panel-row">
+        <div class="row">
+            <div class="col-xs-12"><p class="pre-wrap lh-25">{{ attr(user, 'infos.acf.props.biographie', '<em>Aucune information disponible</em>')|raw }}</p></div>
+        </div>
+    </div>
+</section>
+
+{# Films et Séries #}
+{% set realData = getData(null, 5, [
+    ['type','in',['film', 'serie']],
+    'and',
+    [
+        ['acf.realisateurs.listing','contains',user.id],'or',
+
+        ['acf.scenarios.scenaristes','contains',user.id],'or',
+        ['acf.scenarios.dialoguistes','contains',user.id],'or',
+        ['acf.scenarios.script_doctors','contains',user.id],'or',
+        
+        ['acf.acteurs_actrices.listing','contains',user.id],'or',
+        
+        ['acf.production.producteurs','contains',user.id],'or',
+        ['acf.production.producteurs_executifs','contains',user.id],'or',
+        ['acf.production.producteurs_delegues','contains',user.id],'or',
+        ['acf.production.producteurs_associes','contains',user.id],'or',
+        
+        ['acf.equipe_technique.accessoiristes','contains',user.id],'or',
+        ['acf.equipe_technique.assistants_accessoiristes','contains',user.id],'or',
+        ['acf.equipe_technique.operateurs','contains',user.id],'or',
+        ['acf.equipe_technique.assistants_operateurs','contains',user.id],'or',
+        ['acf.equipe_technique.assistants_realisateurs','contains',user.id],'or',
+        ['acf.equipe_technique.ingenieurs_son','contains',user.id],'or',
+        ['acf.equipe_technique.assistants_ingenieurs_son','contains',user.id],'or',
+        ['acf.equipe_technique.cameramen_cadreurs','contains',user.id],'or',
+        ['acf.equipe_technique.costumiers','contains',user.id],'or',
+        ['acf.equipe_technique.assistants_costumiers','contains',user.id],'or',
+        ['acf.equipe_technique.electriciens','contains',user.id],'or',
+        ['acf.equipe_technique.assistants_electriciens','contains',user.id],'or',
+        ['acf.equipe_technique.machinistes','contains',user.id],'or',
+        ['acf.equipe_technique.assistants_machinistes','contains',user.id],'or',
+        ['acf.equipe_technique.maquilleurs','contains',user.id],'or',
+        ['acf.equipe_technique.assistants_maquilleurs','contains',user.id],'or',
+        ['acf.equipe_technique.photographes_de_plateau','contains',user.id],'or',
+        ['acf.equipe_technique.regisseurs','contains',user.id],'or',
+        ['acf.equipe_technique.assistants_regisseurs','contains',user.id],'or',
+        ['acf.equipe_technique.scripts','contains',user.id],'or',
+        ['acf.equipe_technique.cascadeurs','contains',user.id],'or',
+        ['acf.equipe_technique.monteurs','contains',user.id],'or',
+        ['acf.equipe_technique.assistants_monteurs','contains',user.id],'or',
+        ['acf.equipe_technique.etalonneurs','contains',user.id],'or',
+        ['acf.equipe_technique.compositeurs','contains',user.id],'or',
+        ['acf.equipe_technique.attaches_de_presse','contains',user.id],'or',
+        ['acf.equipe_technique.auteurs','contains',user.id],'or',
+        ['acf.equipe_technique.directeurs_de_casting','contains',user.id],'or',
+        ['acf.equipe_technique.consultants','contains',user.id],'or',
+        ['acf.equipe_technique.decorateurs','contains',user.id],'or',
+        ['acf.equipe_technique.assistants_decorateurs','contains',user.id],'or',
+        ['acf.equipe_technique.story_boarders','contains',user.id]
+    ]
+], {'acf.dates.date_de_sortie':'desc'}) %}
+{% if realData.count > 0  %}
+    <section class="panel-target mt-30 mb-30">
+        <header><h2 class="panel-main-title linear-g-title mt-5">Films et Séries</h2></header>
+        <div class="panel-row">
+            <div class="row">
+                <div class="col-xs-12" data-loadmore-view>
+                    <div class="listing table-responsive">
+                        <table class="table inline-link">
+                            <thead>
+                                <tr class="text-uppercase">
+                                    <th data-minmax="80" class="text-center">Année</th>
+                                    <th class="th-xs-minmax-250">Titre</th>
+                                    <th data-minmax="280">Métier(s)</th>
+                                </tr>
+                            </thead>
+                            <tbody data-loadmore-replacement>
+                                {% for item in realData.items %}
+                                    <tr>
+                                        <td class="text-center">{{date(acf(item, 'dates.date_de_sortie')).format('Y')}}</td>
+                                        <td><a href="{{getPostHref(item)}}" class="c-p-dark">{{ item.title }}</a></td>
+                                        <td class="comma-sep">
+                                            {{ (user.id in acf(item, 'realisateurs.listing') ? '<span>Réalisateur</span>')|raw }}
+
+                                            {{ (user.id in acf(item, 'scenarios.scenaristes') ? '<span>Scénariste</span>')|raw }}
+                                            {{ (user.id in acf(item, 'scenarios.dialoguistes') ? '<span>Dialoguiste</span>')|raw }}
+                                            {{ (user.id in acf(item, 'scenarios.script_doctors') ? '<span>Script Doctor</span>')|raw }}
+                                            
+                                            {{ (user.id in acf(item, 'acteurs_actrices.listing') ? '<span>Acteur/Actrice</span>')|raw }}
+                                            
+                                            {{ (user.id in acf(item, 'production.producteurs') ? '<span>Producteur</span>')|raw }}
+                                            {{ (user.id in acf(item, 'production.producteurs_executifs') ? '<span>Producteur Executif</span>')|raw }}
+                                            {{ (user.id in acf(item, 'production.producteurs_delegues') ? '<span>Producteur Délégué</span>')|raw }}
+                                            {{ (user.id in acf(item, 'production.producteurs_associes') ? '<span>Producteur Associé</span>')|raw }}
+
+                                            {{ (user.id in acf(item, 'equipe_technique.accessoiristes') ? '<span>Accessoiriste</span>')|raw }}
+                                            {{ (user.id in acf(item, 'equipe_technique.assistants_accessoiristes') ? '<span>Assistant accessoiriste</span>')|raw }}
+                                            {{ (user.id in acf(item, 'equipe_technique.operateurs') ? '<span>Opérateur</span>')|raw }}
+                                            {{ (user.id in acf(item, 'equipe_technique.assistants_operateurs') ? '<span>Assistants opérateur</span>')|raw }}
+                                            {{ (user.id in acf(item, 'equipe_technique.assistants_realisateurs') ? '<span>Assistants réalisateur</span>')|raw }}
+                                            {{ (user.id in acf(item, 'equipe_technique.ingenieurs_son') ? '<span>Ingénieur son</span>')|raw }}
+                                            {{ (user.id in acf(item, 'equipe_technique.assistants_ingenieurs_son') ? '<span>Assistant ingénieur son</span>')|raw }}
+                                            {{ (user.id in acf(item, 'equipe_technique.cameramen_cadreurs') ? '<span>Cameraman cadreur</span>')|raw }}
+                                            {{ (user.id in acf(item, 'equipe_technique.costumiers') ? '<span>Costumier</span>')|raw }}
+                                            {{ (user.id in acf(item, 'equipe_technique.assistants_costumiers') ? '<span>Assistant costumier</span>')|raw }}
+                                            {{ (user.id in acf(item, 'equipe_technique.electriciens') ? '<span>Electricien</span>')|raw }}
+                                            {{ (user.id in acf(item, 'equipe_technique.assistants_electriciens') ? '<span>Assistant électricien</span>')|raw }}
+                                            {{ (user.id in acf(item, 'equipe_technique.machinistes') ? '<span>Machiniste</span>')|raw }}
+                                            {{ (user.id in acf(item, 'equipe_technique.assistants_machinistes') ? '<span>Assistant machiniste</span>')|raw }}
+                                            {{ (user.id in acf(item, 'equipe_technique.maquilleurs') ? '<span>Maquilleur</span>')|raw }}
+                                            {{ (user.id in acf(item, 'equipe_technique.assistants_maquilleurs') ? '<span>Assistant maquilleur</span>')|raw }}
+                                            {{ (user.id in acf(item, 'equipe_technique.photographes_de_plateau') ? '<span>Photographe de plateau</span>')|raw }}
+                                            {{ (user.id in acf(item, 'equipe_technique.regisseurs') ? '<span>Régisseur</span>')|raw }}
+                                            {{ (user.id in acf(item, 'equipe_technique.assistants_regisseurs') ? '<span>Assistant régisseur</span>')|raw }}
+                                            {{ (user.id in acf(item, 'equipe_technique.scripts') ? '<span>Script</span>')|raw }}
+                                            {{ (user.id in acf(item, 'equipe_technique.cascadeurs') ? '<span>Cascadeur</span>')|raw }}
+                                            {{ (user.id in acf(item, 'equipe_technique.monteurs') ? '<span>Monteur</span>')|raw }}
+                                            {{ (user.id in acf(item, 'equipe_technique.assistants_monteurs') ? '<span>Assistant monteur</span>')|raw }}
+                                            {{ (user.id in acf(item, 'equipe_technique.etalonneurs') ? '<span>Etalonneur</span>')|raw }}
+                                            {{ (user.id in acf(item, 'equipe_technique.compositeurs') ? '<span>Compositeur</span>')|raw }}
+                                            {{ (user.id in acf(item, 'equipe_technique.attaches_de_presse') ? '<span>Attaché de presse</span>')|raw }}
+                                            {{ (user.id in acf(item, 'equipe_technique.auteurs') ? '<span>Auteur</span>')|raw }}
+                                            {{ (user.id in acf(item, 'equipe_technique.directeurs_de_casting') ? '<span>Directeur de casting</span>')|raw }}
+                                            {{ (user.id in acf(item, 'equipe_technique.consultants') ? '<span>Consultant</span>')|raw }}
+                                            {{ (user.id in acf(item, 'equipe_technique.decorateurs') ? '<span>Décorateur</span>')|raw }}
+                                            {{ (user.id in acf(item, 'equipe_technique.assistants_decorateurs') ? '<span>Assistant décorateur</span>')|raw }}
+                                            {{ (user.id in acf(item, 'equipe_technique.story_boarders') ? '<span>Story boarder</span>')|raw }}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            {% if realData.count > 0 %} {{ p('row-see-more', {link: getCurrentUrlParamsLess()~'?panel=films-et-series&scrolltop', dataJs:'singlePanelScrollable={click:toggle}'}) }} {% endif %}
+        </div>
+    </section>
+{% endif  %}

@@ -1,0 +1,33 @@
+{% set infos = findAcf('infos-du-site', 1) %}
+
+{% set tel = acf(infos, 'info.tel') %}
+{% set mob1 = acf(infos, 'info.mobile1') %}
+{% set mob2 = acf(infos, 'info.mobile2') %}
+{% set email1 = acf(infos, 'info.email_1') %}
+
+{% set fb = acf(infos, 'info.fb') %}
+{% set tt = acf(infos, 'info.tt') %}
+{% set yt = acf(infos, 'info.yt') %}
+{% set lin = acf(infos, 'info.in') %}
+{% set cls = 'no-ajaxify active--pulse btn-round round-40 bg-gray' %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-md-5">
+            {{ comp('quick-contact-form') }}
+        </div>
+        <div class="col-xs-12 col-md-3">
+
+            <div class="sep"></div>
+
+            {% if tel!=''%}<a title="Téléphone" data-label="{{tel}}" class="{{cls}}" href="tel:{{tel}}" target="blank">{{i('bytesize:telephone')}}</a>{% endif %}
+                {% if mob1!=''%}<a title="Téléphone" data-label="{{mob1}}" class="{{cls}}" href="tel:{{mob1}}" target="blank">{{i('clarity:mobile-phone-solid')}}</a>{% endif %}
+                {% if email1!=''%}<a title="Email" data-label="{{email1}}" class="{{cls}}" href="mailto:{{email1}}" target="blank">{{i('clarity:envelope-line')}}</a>{% endif %}
+                
+                {% if fb!=''%}<a title="Facebook" data-label="Facebook" class="facebook {{cls}}" href="{{fb}}" target="blank">{{i('bx:bxl-facebook')}}</a>{% endif %}
+                {% if yt!=''%}<a title="YouTube" data-label="YouTube" class="youtube {{cls}}" href="{{yt}}" target="blank">{{i('ant-design:youtube-outlined')}}</a>{% endif %}
+                {% if tt!=''%}<a title="Twitter" data-label="Twitter" class="twitter {{cls}}" href="{{tt}}" target="blank">{{i('ant-design:twitter-outlined')}}</a>{% endif %}
+                {% if lin!=''%}<a title="LinkedIn" data-label="LinkedIn" class="linkedIn {{cls}}" href="{{lin}}" target="blank">{{i('ant-design:linkedin-outlined')}}</a>{% endif %}
+        </div>
+    </div>
+</div>

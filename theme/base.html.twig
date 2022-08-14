@@ -1,0 +1,40 @@
+{% import 'imports/macros.html.twig' as macros %} {% if isNotXHR() %} 
+	{{ beginHTML({
+		noIndex: true,
+		themeColor: '#3f0514',
+		scrollBarSelector: true,
+		preloaderColor: 'rgba(254, 138, 4, 0.623)',
+		googleFonts: 'Poppins:wght@100;200;300;400;500;600;700;800;900&family=Roboto:wght@100;200;300;400;500;600;700;800;900',
+		headAssets: [['bs-3','fa-4','fa-5','animate','basic']],
+		cssCDN: [
+			'plyr/plyr', 'daterangepicker/css/daterangepicker.min', 'select2/css/select2.min', 'pretty-checkbox/css/pretty-checkbox.min',
+		],
+		jsCDN: [
+			'plyr/plyr', 'swagg/services/diapowl',
+			'moment/js/moment.min', 'daterangepicker/js/daterangepicker.min', 'select2/js/select2.full.min',
+			'swagg/services/toggle-mobile-nav',
+		],
+		themeJsAssets: [ 'app' ],
+		themeCssAssets: []
+	}) }}
+	
+<body class="{{macros.bodyClsName(false)}}">
+		{{ getLess([
+			'--basic',
+			'header', 'xhr-skeleton', 'hero',
+			'portrait', 'landscape', 'partials', 'single', 'cards',
+			'news', 'profile', 'panel', 'media-grid', 'media-grid-col','aside', 'stars',
+			'sections', 'table'
+		]) }}
+	{{ preloader(20) }}
+{% endif %}
+
+	<div class="app-page" data-meta-title="{{- getPost().fullTitle|raw -}}" data-body-class="{{macros.bodyClsName(false)}}">
+		<div class="content-layout bg-white">
+			{{ p('header') }}
+			<main>{{ block('main') }}</main>
+			{{ p('footer') }}
+		</div>
+	</div>
+	
+{% if isNotXHR() %} {{ endHTML() }} {% endif %}

@@ -1,0 +1,18 @@
+<div class="flyer--portrait-lg-wrapper">
+
+    {% for item in attr(data, 'items') %}
+        {% if acf(item, 'props.placement') == (placement ?? 99) %}
+            {% set title = item.title %}
+
+            <article class="portrait-flyer">
+                <figure>
+                    <a href="{{getPostHref(item.www)}}" title="{{title}}">
+                        {{ image(title, item.image, 317, 450, 'r', 'img-thumb img-responsive', [0,0,0])|raw }}
+                    </a>
+                </figure>
+            </article>
+
+        {% endif %}
+    {% endfor %}
+
+</div>

@@ -1,0 +1,16 @@
+{% for item in attr(attr(post, 'saisons'), 'items') %}
+
+    {% set item = pop(item) %}
+    
+    {{ c('saison', { 'post': post, 'item': item }) }}
+    
+{% else %}
+
+    {% set dictionnary = ['aucune Saison', 'aucun Épisode'] %}
+
+    {{ p('no-match', {
+        'title': 'Aucun élément trouvé',
+        'content': "Il n'y a actuellement "~ dictionnary[0] ~" rattachée à <b>"~ post.title ~"</b>"
+    }) }}
+
+{% endfor %}

@@ -1,0 +1,43 @@
+{% for src in randomify(files ?? []) %}
+    {% set isYT = isYT ?? false %}
+    {% set title = src.description ?? title %}
+    <div class="col-sm-4">
+        <a
+            data-diapowl="{{ {(isYT ? 'video':'image'): isYT ? src.ytID:src, 'caption':title, 'yt':isYT}|json_encode }}"
+            data-js="App={click:initDiapOwl}"
+            href="#"
+            class="media-grid-cols figure bg-cover"
+            style="background:url({{ isYT ? src.preview : src}})"
+            title="{{title}}"
+        >
+            {{ isYT ? i('bi:play-circle', 'play-circle') : '' }}
+            <h3 class="title ellipsis lc1">{{title}}</h3>
+        </a>
+    </div>
+{% else %}
+
+    {# only for display empty grids #}
+    <div class="col-xs-12">
+        <div class="mediaGrids">
+            {{ c('media-grids', {'files': []}) }}
+        </div>
+    </div>
+    {# <div class="col-xs-12">
+        {{ p('no-match', {
+            'title': 'Aucun élément trouvé',
+            'content': "Il n'y a actuellement aucune Vidéo rattachée à <b>"~ getPost().title ~"</b>"
+        }) }}
+    </div> #}
+
+{% endfor %}
+
+<script>
+    AddScript(function(){
+        'use strict';
+        $.map($('.saison-videos'), function(sv){
+            if( $(sv).find('.col-sm-4').length>0 && $(sv).find('.col-xs-12').length>0 ){
+                $(sv).find('.col-xs-12').remove();
+            }
+        })
+    })
+</script>

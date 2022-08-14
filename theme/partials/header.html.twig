@@ -1,0 +1,91 @@
+{% set appName = getAppEnv('APP_NAME') %}
+
+<div style="position:relative;z-index:999">
+    <header id="mainHeader" class="mainHeader stickable_">
+        <div class="container-fluid">
+            <div class="row rowTop">
+                <div class="col col-md-4 col-md-push-4">
+                    <div class="flex">
+                        <a class="menuToggler icon sm-visible" href="#" data-js="Header={click:toggleMainNav}">
+                            {{ i('fe:bar', 'bar') }}{{ i('fe:close', 'closer') }}
+                        </a>
+                        <a class="logoWrapper" href="{{getUrl()}}"><img alt="{{appName}}" src="{{getLogoSrc(2)}}"></a>
+                        <a class="userWrapper icon sm-visible" href="#">{{ i('icons8:gender-neutral-user') }}</a>
+                    </div>
+                </div>
+                <div class="col col-md-4 col-md-pull-4">
+                    <div class="searchWrapper">
+                        <form class="searchWrapper custom-style" data-js="Header={submit:handleSubmit}">
+                            <input
+                                data-js="Header={focus|blur|click|paste|keyup|keypress|change:submitSearch}"
+                                class="form-control"
+                                type="text"
+                                name="q"
+                                placeholder="Rechercher dans {{appName}}"
+                                required
+                                value="{{ app.request.get('q') }}"
+                            >
+                            <button class="active--pulse">{{ i('bx:bx-search-alt') }}</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="col col-md-4 sm-hidden">
+                    <div class="socialsWrapper">
+                        <a class="active--pulse insta" href="#">{{ i('akar-icons:instagram-fill') }}</a>
+                        <a class="active--pulse fb" href="#">{{ i('akar-icons:facebook-fill') }}</a>
+                    </div>
+                </div>
+            </div>
+            <div class="row rowMainNav has-transition">
+                <div class="col-md-12">
+                    <nav class="mainNav" role="navigation">{{ getNav({ 'nav': 'menu-principal' }) }}</nav>
+                </div>
+            </div>
+        </div>
+    </header>
+</div>
+
+<script>
+    AddScript(function(){
+
+        var $main = $('main');
+
+        __.dataJs({
+            Header: {
+                toggleMainNav: function($t){
+                    $('body').toggleClass('main-nav-visible');
+                },
+                submitSearch: function($t){
+                    var val = $t.val().trim(),
+                        urlRef = __.getUrlVar('ref'),
+                        q   = __.getUrlVar('q'),
+                        url = __.getUrl(`recherche?q=${val}&ref=${urlRef || document.location.href}`);
+                        if(val!=''){
+                            if(val != q){
+                                $main.addClass('pending pending-transparent');
+                                Ajaxify.pushState(url);
+                                __.debounce('Header.submitSearch', 700, function(){
+                                    $t.parents('form').trigger('submit');
+                                })
+                            }
+                        }
+                        else {
+                            if(urlRef) Ajaxify.getPage(urlRef);
+                        }
+                },
+                handleSubmit: function($form){
+                    $.ajax({
+                        url: document.location.href,
+                        success: function(dom){
+                            ReplaceNode.init(dom, 'main', function(){
+                                LazyLoading.scanDOM();
+                                __.scrollTop()
+                            })
+                        },
+                        complete: function(){ $main.removeClass('pending pending-transparent') },
+                    })
+                }
+            }
+        })
+    })
+</script>

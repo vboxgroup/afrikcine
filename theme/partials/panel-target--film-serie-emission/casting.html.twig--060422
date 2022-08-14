@@ -1,0 +1,44 @@
+{% macro _(title, jobs, post, key, customKey) %}
+    {% set id = uId() %}
+    <section class="panel-target panel-casting panel-{{id}}">
+        <header><h2 class="panel-main-title linear-g-title mt-5">{{title}}</h2></header>
+        {% set key = key ? key~'.' : key %}
+        <div class="panel-row">
+            <table class="table table-striped comma-table">
+                <tbody>
+                    {% for job in jobs %}
+                        {% set users = attr(post, customKey ? customKey : key ~ getSlug(job, '_')) %}
+                        {% if users is not empty %}
+                            <tr>
+                                <td style="width:175px" class="text-capitalize">{{job}}</td>
+                                <td class="comma-sep">
+                                    {% for u in users %}
+                                        {{ c('username',{'user':u}) }}
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+{% endmacro %}
+
+{{ _self._('Réalisation', ['Réalisateurs'], post) }}
+{{ _self._('Scénarios', ['Scénaristes', 'Dialoguistes', 'Script Doctors'], post, 'scenarios') }}
+{{ _self._('Acteurs/Actrices', ['Acteurs/Actrices'], post, null, 'acteurs') }}
+{{ _self._('Production', ['Producteurs', 'Producteurs Exécutifs', 'Producteurs Délégués', 'Producteurs Associés'], post, 'production') }}
+{{ _self._('Sociétés', ['Distributeurs', 'Producteurs Exécutifs', 'Diffuseurs', 'Co-production'], post, 'societes') }}
+{{ _self._('Equipe Technique', ['Accessoiristes', 'Assistants accessoiristes', 'Opérateurs', 'Assistants opérateurs', 'Assistants réalisateurs', 'Ingénieurs son', 'Assistants ingénieurs son', 'Cameramen (cadreurs)', 'Costumiers', 'Assistants costumiers', 'Électriciens', 'Assistants électriciens', 'Machinistes', 'Assistants machinistes', 'Maquilleurs', 'Assistants maquilleurs', 'Photographes de plateau', 'Régisseurs', 'Assistants régisseurs', 'Scripts', 'Cascadeurs', 'Monteurs', 'Assistants monteurs', 'Etalonneurs', 'Compositeurs', 'Attachés de presse', 'Auteurs', 'Directeurs de casting', 'Consultants', 'Décorateurs', 'Assistants décorateurs', 'Story boarders'], post, 'equipe_technique') }}
+
+<script>
+    AddScript(function(){
+        $.map($('.panel-casting'), function(panel){
+            var $panel = $(panel);
+            if(!$panel.find('tr').length){
+                $panel.hide();
+            }
+        })
+    })
+</script>

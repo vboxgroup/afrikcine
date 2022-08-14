@@ -1,0 +1,180 @@
+{% set autres_props = acf(post, 'autres_proprietes') %}
+
+<section class="panel-target panel-index mt-5">
+    <div class="panel-row">
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-striped comma-table">
+                    <tbody>
+                        <tr>
+                            <td>De</td>
+                            <td class="comma-sep">
+                                {% for u in attr(post, 'realisateurs') %}
+                                    {{ c('username',{'user':u}) }}
+                                {% endfor %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Par</td>
+                            <td class="comma-sep">
+                                {% for u in 
+                                        attr(post, 'scenarios.scenaristes', [])|merge(
+                                        attr(post, 'scenarios.dialoguistes', []),
+                                        attr(post, 'scenarios.script_doctors', [])
+                                    )
+                                %}
+                                    {{ c('username',{'user':u}) }}
+                                {% endfor %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Avec</td>
+                            <td class="comma-sep">
+                                {% for u in attr(post, 'acteurs') %}
+                                    {{ c('username',{'user':u}) }}
+                                {% endfor %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Date de sortie</td>
+                            <td>{{ getFrenchDate(attr(post, 'acf.dates.date_de_sortie'), 'd/M/Y') }}</td>
+                        </tr>
+                        <tr>
+                            <td>Durée{{post.type=='serie'?' moyenne':''}}</td>
+                            <td>
+                                {{ attr(autres_props, 'duree_du_film.h', attr(autres_props, 'duree_moyenne.h'))!=''?attr(autres_props, 'duree_du_film.h', attr(autres_props, 'duree_moyenne.h'))~'h' }}
+                                {{ attr(autres_props, 'duree_du_film.i', attr(autres_props, 'duree_moyenne.i'))!=''?attr(autres_props, 'duree_du_film.i', attr(autres_props, 'duree_moyenne.i'))~'mn' }}
+                                {{ attr(autres_props, 'duree_du_film.s')!=''?attr(autres_props, 'duree_du_film.s')~'s' }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Genres</td>
+                            <td class="comma-sep">
+                                {% for genre in attr(post, 'genres') %}
+                                    <span>{{ genre.title }}</span>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Produit par</td>
+                            <td class="comma-sep">
+                                {% for u in 
+                                        attr(post, 'production.producteurs', [])|merge(
+                                        attr(post, 'production.producteurs_executifs', []),
+                                        attr(post, 'production.producteurs_delegues', []),
+                                        attr(post, 'production.producteurs_associes', [])
+                                    )
+                                %}
+                                    {{ c('username',{'user':u}) }}
+                                {% endfor %}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="panel-target panel-index--synopsis">
+    <header><h2 class="panel-main-title linear-g-title mt-5">Synopsis</h2></header>
+    <div class="panel-row">
+        <div class="row">
+            <div class="col-xs-12">
+                <p class="pre-wrap lh-25">{{attr(post, 'description')}}</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="panel-target panel-index--casting mt-20">
+    <header><h2 class="panel-main-title linear-g-title mt-5">Casting</h2></header>
+    <div class="panel-row">
+        <div class="row">
+            {% for i, u in attr(post, 'acteurs') %}
+                {{ c('profile',{'user':u}) }}
+            {% endfor %}
+        </div>
+        <div class="row">
+            <div class="col-xs-12">{{
+                p('sec-see-more', {
+                    title:'Plus',
+                    link:getCurrentUrlParamsLess()~'?panel=casting&scrolltop',
+                    dataJs:'singlePanelScrollable={click:toggle}'
+                }) }}
+            </div>
+        </div>
+    </div>
+</section>
+
+{% set episodesPhotos = [] %}
+{% for saison in attr(attr(post, 'saisons'), 'items') %}
+    {% for episode in attr(saison, 'episodes') %}
+        {% set p = attr(getMedia(episode, 'photos'), 'photos') %}
+        {% set episodesPhotos = episodesPhotos|merge( p ?? []) %}
+    {% endfor %}
+{% endfor %}
+{% set photos = getMedia(post, 'photos').photos|merge(episodesPhotos) %}
+<section class="panel-target panel-index--photos mt-20">
+    <header><h2 class="panel-main-title linear-g-title mt-5">Photos</h2></header>
+    <div class="panel-row">
+        <div class="row">
+            <div class="col-md-12 initDiapOwl">
+                <div class="mediaGrids">
+                    {% for src in randomify(photos)|slice(0, 5) %}
+                        <a
+                            data-diapowl="{{ {'image':src,'caption':post.title}|json_encode }}"
+                            data-js="App={click:initDiapOwl}"
+                            href="#"
+                            class="mediaGrid figure bg-cover"
+                            style="background:url({{src}})"
+                        ></a>
+                    {% endfor %}
+                    {% for i in 1..5-photos|length %}<div class="mediaGrid emptyGrid"></div>{% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">{{
+                p('sec-see-more', {
+                    title:'Plus',
+                    link:getCurrentUrlParamsLess()~'?panel=photos&scrolltop',
+                    dataJs:'singlePanelScrollable={click:toggle}'
+                }) }}
+            </div>
+        </div>
+    </div>
+</section>
+
+{% set data = getData('news', 3, [
+    ['acf.related.films','contains',attr(post, 'id')],'or',
+    ['acf.related.series','contains',attr(post, 'id')]
+]) %}
+{% set knp = mimicKnpPaginator(data.count, data.limit) %}
+<section class="panel-target panel-index--news mt-20">
+    <header><h2 class="panel-main-title linear-g-title mt-5">News</h2></header>
+    <div class="panel-row">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="news-listing">
+                    {% for item in data.items %}
+                        {{ c('news-listing', {'item':item, 'loop':loop}) }}
+                    {% else %}
+                        {{ p('empty-list', {'title':'Aucun article associé à cet élément', 'content':''}) }}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% if data.count > 0 %}
+        <div class="row">
+            <div class="col-xs-12">{{
+                p('sec-see-more', {
+                    title:'Plus',
+                    link:getCurrentUrlParamsLess()~'?panel=news&scrolltop',
+                    dataJs:'singlePanelScrollable={click:toggle}'
+                }) }}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>

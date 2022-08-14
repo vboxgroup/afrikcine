@@ -1,0 +1,47 @@
+{% set href = getPostHref(item) %}
+{% set autres_props = acf(item, 'autres_proprietes') %}
+
+<article class="film-serie--listing">
+    <div class="d-flex">
+        <figure>
+            <a href="{{href}}" title="{{item.title}}">
+                {{ image(item.title, acf(item, 'flyers.affiche_en_mode_portrait', item.image), 147, 196, 'r', 'img-thumb img-responsive', [0,0,0])|raw }}
+            </a>
+        </figure>
+        <div class="meta">
+            <h3 class="title mt-0"><a href="{{href}}" class="c-p-dark">{{ item.title }}</a></h3>
+            <div class="sub">
+                <span>{{ getFrenchDate(item.acf.dates.date_de_sortie, 'd/M/Y') }}</span>
+                <span>
+                    {{ attr(autres_props, 'duree_du_film.h', attr(autres_props, 'duree_moyenne.h'))!=''?attr(autres_props, 'duree_du_film.h', attr(autres_props, 'duree_moyenne.h'))~'h' }}
+                    {{ attr(autres_props, 'duree_du_film.i', attr(autres_props, 'duree_moyenne.i'))!=''?attr(autres_props, 'duree_du_film.i', attr(autres_props, 'duree_moyenne.i'))~'mn' }}
+                    {{ attr(autres_props, 'duree_du_film.s')!=''?attr(autres_props, 'duree_du_film.s')~'s' }}
+                </span>
+                <span>
+                    {% for genre in item.genres %}
+                        <span>{{ genre.title }}</span>
+                    {% endfor %}
+                </span>
+            </div>
+            <div class="d-flex flex-links"><span>De</span>
+                <div class="links-wrapper">
+                    {% for u in item.realisateurs %}
+                        {% set fullname = getUserFullName(u) %}
+                        <a title="{{fullname}}" href="{{ path('readUser',{'username':u.usernameSlugged,'id':u.id}) }}" class="author ellipsis lc1 c-p-dark">{{fullname}}</a>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="d-flex flex-links"><span>Avec</span>
+                <div class="links-wrapper">
+                    {% for u in item.acteurs %}
+                        {% set fullname = getUserFullName(u) %}
+                        <a title="{{fullname}}" href="{{ path('readUser',{'username':u.usernameSlugged,'id':u.id}) }}" class="author ellipsis lc1 c-p-dark">{{fullname}}</a>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="d-flex flex-links"><span>Synopsis</span>
+                <p class="ellipsis lc3">{{ item.description }}</p>
+            </div>
+        </div>
+    </div>
+</article>

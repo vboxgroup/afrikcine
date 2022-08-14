@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+{% block main %}
+
+{% set post = getPost() %}
+
+<div class="container-fluid mainContainerFluid">
+
+    {{ p('page-header-row',{'title':'Liste des séries'}) }}
+
+    <div class="row">
+
+        {{ p('header-listing-films',{title:'séries'}) }}
+
+        <div class="col-md-8" data-loadmore-view>
+
+            {% set ctx = getFilmAndSerieFilteringContext() %}
+            {% set data = getData('serie', 2, ctx.criteria, ctx.orderBy) %}
+            {% set knp = mimicKnpPaginator(data.count, data.limit) %}
+
+            {{ p('match-total', {'count':data.count}) }}
+            
+            <div class="dp-table w-100" data-loadmore-replacement>
+                {% for item in data.items %}
+                    {{ c('film-serie--listing', {'item':item}) }}
+                {% else %}
+                    {{ p('no-match') }}
+                {% endfor %}
+            </div>
+
+            {{ p('knp',{'knp':knp}) }}
+
+        </div>
+        
+        <div class="col-md-4">
+            <aside>
+                {{ s('__afrikcine-en-continue') }}
+                {{ s('flyer--portrait-lg') }}
+            </aside>
+        </div>
+        
+    </div>
+
+    {% set categorie = findBy('b',[['type','==','categorie'],['slug','==',post.slug]], [], 1) %}
+    {{ s('__news',{title: 'News cinéma', data: getData('news', 6, [['acf.props.parent','==',attr(categorie, 'id')]])}) }}
+
+</div>
+
+
+{% endblock %}

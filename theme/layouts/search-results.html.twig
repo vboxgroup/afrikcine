@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+{% block main %}
+
+{% set post = getPost() %}
+
+<div class="container-fluid mainContainerFluid">
+
+    {{ p('page-header-row',{'title':post.htmlTitle}) }}
+
+    <div class="row">
+
+        <div class="col-md-8" data-loadmore-view>
+
+            <div data-loadmore-replacement>
+                {% for item in data.items %}
+                    {% set type = item.type %}
+                    {% if type == 'news' %}
+                        {{ c('news-listing', {'item':item, 'loop':loop}) }}
+                    {% endif %}
+
+                {% else %}
+                    {{ p('no-match', {content:false}) }}
+                {% endfor %}
+            </div>
+            
+            {{ p('knp',{'knp':data.knp}) }}
+            
+        </div>
+        
+        <div class="col-md-4">
+            <aside>
+                {{ s('__news-categories') }}
+                {{ s('__afrikcine-en-continue') }}
+                {{ s('__notre-page-facebook') }}
+                {{ s('flyer--portrait-lg') }}
+            </aside>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

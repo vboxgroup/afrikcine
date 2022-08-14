@@ -1,0 +1,33 @@
+{% set items = findAcf('filieres') %}
+
+<div class="home-filieres">
+    <div id="home_filieres" class="owl-carousel owl-theme owl-cute-dots">
+        {% for item in items %}
+            <div class="item text-center">
+                <div class="icon" style="background-color: {{ random(['#1352b8','#772fbb','#bb2f67','#c69a24','#92bb2f','#34989e','#9e3491', '#ffa500']) }}">
+                    {{ item.icon|raw }}
+                </div>
+                <h5 class="title">{{ item.title }}</h5>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    AddScript(function(){
+        'use strict';
+        $('#home_filieres').owlCarousel({
+            dots: true, nav: false,
+            loop: true,
+            autoplay: true, autoplayHoverPause: true, autoplayTimeout: 5000, autoplaySpeed: 2000,
+            responsive: {
+                0: { items: 1 },
+                320: { items: 2 },
+                540: { items: 3 },
+                772: { items: 3 },
+                992: { items: 5 },
+                1200: { items: 6 },
+            }
+        });
+    });
+</script>

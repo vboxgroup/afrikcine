@@ -1,0 +1,14 @@
+{% if data.count > 0 %}
+    
+    <div class="flex items-center justify-between">
+        {{ p('sec-header', {title:'Films à venir', cls:'mt-0 linear-g-title'}) }}
+        {{ p('sec-see-more', {link:getUrl('cinema')}) }} 
+    </div>
+
+    <div class="flex4 movie--portrait-sm-3-lines-wrapper owl-carousel owl-theme owl-cute-nav {{cls??''}}">
+        {% for item in data.items %}
+            {{ c('movie--portrait-sm-3-lines', { item: item }) }}
+        {% endfor %}
+    </div>
+    
+{% endif %}

@@ -1,0 +1,25 @@
+{% set data = getData('news', 2, [['acf.related.stars','contains',user.id]]) %}
+{% set knp = mimicKnpPaginator(data.count, data.limit) %}
+
+<section class="panel-target mt-30">
+    <div class="panel-row">
+        <div class="row">
+            <div class="col-xs-12" data-loadmore-view>
+
+                <div class="news-listing" data-loadmore-replacement>
+                    {% for item in data.items %}
+                        {{ c('news-listing', {'item':item, 'loop':loop}) }}
+                    {% else %}
+                        {{ p('no-match', {
+                            'title':'Aucune actualité trouvée',
+                            'content':"Il n'y a actuellement aucune news rattachée  à <b>"~ getUserFullName(user) ~"</b>"
+                        }) }}
+                    {% endfor %}
+                </div>
+                
+                {{ p('knp',{'knp':knp}) }}
+                
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,21 @@
+{% set data = getData('news', 10, [], [], 0) %}
+{% if data.count > 0 %}
+    <div class="aside-row">
+        {{ p('sec-header',{title:'Afrikcine en continue', cls:'linear-g-title mg-auto'}) }}
+        <div class="borderedBlock">
+            {#{{ p('sec-header-bordered-block',{title:'Rubriques'}) }}#}
+            <div class="stripedContent">
+                {{xhr('flux--2-lines', {
+                    id: 'Afrikcine en continue',
+                    classNames: 'flux--2-lines-wrapper',
+                    blocksCount: 2,
+                    data: data,
+                    times: 6,
+
+                    noXHR: true
+                })}}
+            </div>
+        </div>
+        {{ p('sec-see-more', {link:getUrl('news')}) }} 
+    </div>
+{% endif %}

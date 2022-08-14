@@ -1,0 +1,2 @@
+{% set fullname = getUserFullName(user) %}
+<a href="{{ path('readUser',{'username':user.usernameSlugged,'id':user.id}) }}" class="username bold c-p-dark">{{fullname}}</a>

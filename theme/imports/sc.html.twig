@@ -1,0 +1,66 @@
+{% macro gMap() %}
+    {% set infos = getGlobal('infos') %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12">
+                <iframe 
+                    id="mapcanvas"
+                    width="100%" height="100%"
+                    src="https://maps.google.com/maps?q={{acf(infos, 'info.gmap_adresse')}}&amp;{{acf(infos, 'info.gmap_type')}}&amp;z=17&amp;ie=UTF8&amp;iwloc=&amp;output=embed" 
+                    frameborder="0"
+                    scrolling="no"
+                    marginheight="0" marginwidth="0"
+                ></iframe>
+            </div>
+        </div>
+    </div>
+    <style type="text/less">
+        #mapcanvas { height: 270px }
+        @media screen and (max-width: 768px){
+            #mapcanvas { height: 200px }
+        }
+        @media screen and (max-width: 540px){
+            #mapcanvas { height: 170px }
+        }
+    </style>
+{% endmacro %}
+
+{% macro contactForm() %}
+    {% set infos = getGlobal('infos') %}
+
+    {% set tel = acf(infos, 'info.tel') %}
+    {% set mob1 = acf(infos, 'info.mobile1') %}
+    {% set email1 = acf(infos, 'info.email_1') %}
+
+    {% set fb = acf(infos, 'info.fb') %}
+    {% set tt = acf(infos, 'info.tt') %}
+    {% set yt = acf(infos, 'info.yt') %}
+    {% set lin = acf(infos, 'info.in') %}
+    {% set cls = 'no-ajaxify active--pulse btn-round round-40 bg-gray' %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-4 col-md-offset-2">
+                {% include 'cards/quick-contact-form.html.twig' %}
+            </div>
+            <div class="col-xs-12 col-md-4">
+
+                <div class="sep"></div>
+
+                {% if tel!=''%}<a title="'Téléphone Fixe'" data-label="{{tel}}" class="{{cls}}" href="#" target="blank">{{i('bytesize:telephone')}}</a>{% endif %}
+                {% if mob1!=''%}<a title="'Téléphone Portable'" data-label="{{mob1}}" class="{{cls}}" href="#" target="blank">{{i('clarity:mobile-phone-solid')}}</a>{% endif %}
+                {% if email1!=''%}<a title="Email" data-label="{{email1}}" class="{{cls}}" href="#" target="blank">{{i('clarity:envelope-line')}}</a>{% endif %}
+                
+                {% if fb!=''%}<a title="Facebook" data-label="Facebook" class="facebook {{cls}}" href="#" target="blank">{{i('bx:bxl-facebook')}}</a>{% endif %}
+                {% if yt!=''%}<a title="YouTube" data-label="YouTube" class="youtube {{cls}}" href="#" target="blank">{{i('ant-design:youtube-outlined')}}</a>{% endif %}
+                {% if tt!=''%}<a title="Twitter" data-label="Twitter" class="twitter {{cls}}" href="#" target="blank">{{i('ant-design:twitter-outlined')}}</a>{% endif %}
+                {% if lin!=''%}<a title="LinkedIn" data-label="LinkedIn" class="linkedIn {{cls}}" href="#" target="blank">{{i('ant-design:linkedin-outlined')}}</a>{% endif %}
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro socials(arg) %}
+    {% import 'imports/macros.html.twig' as macros %}
+    {{ macros.socials(arg) }}
+{% endmacro %}

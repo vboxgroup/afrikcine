@@ -1,0 +1,10 @@
+{% set data = getData('categorie', -1) %}
+
+<div class="aside-row">
+    {{ p('sec-header',{title:'Les news par rubrique', cls:'linear-g-title mg-auto'}) }}
+    <div class="mt-20 text-center">
+        {% for item in randomify(data.items) %}
+            <a href="{{ path('readCategory', {slug:item.slug, id:item.id}) }}" style="font-size:{{random([12,20,18])}}px">{{item.title}}</a>
+        {% endfor %}
+    </div>
+</div>

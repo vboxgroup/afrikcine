@@ -1,0 +1,17 @@
+{% set title = item.title %}
+{% set href = getPostHref(item) %}
+
+<div class="col-xs12 col-xs-6 col-md-4">
+    <article class="features--3-cols">
+        <figure>
+            <a title="{{title}}" href="{{href}}">
+                {{ image(title, item.image, 312, 180, 'c', 'img-thumb img-responsive', [0,0,0])|raw }}
+            </a>
+        </figure>
+        <div class="meta">
+            <div class="categoryWrapper ellipsis lc1"><a href="{{getPostHref(item.category)}}" class="category text-uppercase c-p-dark bold">{{item.category.title}}</a></div>
+            <div class="datetime ellipsis lc1" title="{{getFrenchDate(item.createdAt)|capitalize}}">{{ellipsisDate(item.createdAt)}}</div>
+            <h3 class="titleWrapper ellipsis lc1"><a href="{{href}}" class="title c-p-dark bold">{{title}}</a></h3>
+        </div>
+    </article>
+</div>

@@ -1,0 +1,15 @@
+<p class="desc text-center">Renseignez le formulaire ci-dessous pour nous envoyer un courrier électronique.</p>
+<form class="cute-form" action="{{ path('createBOBloggy', {'type':'inbox'}) }}" method="post">
+    <div class="col-xs-12">{{ gfWrapper("Nom *", 'nom', '', 'required') }}</div>
+    <div class="col-xs-12 col-sm-4">{{ gfWrapper('Téléphone', 'telephone') }}</div>
+    <div class="col-xs-12 col-sm-8">{{ gfWrapper("Email *", 'email', '', 'required') }}</div>
+    <div class="col-xs-12">{{ gfWrapper("Objet *", 'object', '', 'required') }}</div>
+    <div class="col-xs-12">
+        <div class="gf-wrapper">
+            <textarea name="message" class="gf-control form-control" rows="4" style="resize:none" required></textarea>
+            <div class="gf-label">Votre message... *</div>
+        </div>
+    </div>
+    <br>
+    <div class="col-xs-12"><button class="btn-block" type="submit">Envoyer {{i('system-uicons:paper-plane')}}</button></div>
+</form>

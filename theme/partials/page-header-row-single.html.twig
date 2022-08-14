@@ -1,0 +1,14 @@
+{% set post = getPost() %}
+{% set hits = getHits(post) %}
+{% set s = hits > 1 ? 's' : '' %}
+
+<header class="row page-header-row-single">
+    <div class="col-md-12">{{ p('breadcrumb') }}</div>
+    <div class="col-md-12 text-center mb-20">
+        <h1 class="title mt-0">{{post.title}}</h1>
+        <div class="flex items-center justify-center datetime mt-20">
+            <div><i class="fa fa-calendar"></i> {{ getFrenchDate(post.createdAt, 'd/M/Y à H:i') }}</div>
+            <div class="ml-30" title="{{hits}} vue{{s}}"><i class="fa fa-eye"></i> {{hits}}</div>
+        </div>
+    </div>
+</header>

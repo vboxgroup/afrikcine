@@ -1,0 +1,21 @@
+{% for src in randomify(files ?? []) %}
+    {% set isYT = isYT ?? false %}
+    {% set title = src.description ?? title ?? '' %}
+    <a
+        data-diapowl="{{ {(isYT?'video':'image'):isYT?src.ytID:src.preview, 'caption':title, 'yt':isYT}|json_encode }}"
+        data-js="App={click:initDiapOwl}"
+        href="#"
+        class="mediaGrid figure bg-cover"
+        style="background:url({{ src.preview }})"
+        title="{{title}}"
+    >
+        <h3 class="title ellipsis lc1">{{title}}</h3>
+        {{ isYT ? i('bi:play-circle', 'play-circle bottom-right') : '' }}
+    </a>
+{% endfor %}
+
+{% set oLen = files|length %}
+{% set len = (oLen == 0 ? 5 : (oLen > 4 ? 0 : 5 - oLen)) %}
+{% if oLen < 5 and len > 0 %}
+    {% for i in 1..len %}<div class="mediaGrid emptyGrid"></div>{% endfor %}
+{% endif %}

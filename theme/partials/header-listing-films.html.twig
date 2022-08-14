@@ -1,0 +1,37 @@
+<div class="col-md-12 text-center mb-30">
+    <form action="{{getCurrentUrlParamsLess()}}?filtrer&" data-js="Filter={change:onSubmit}">
+        <div>
+            <select name="o" class="select-p-dark">
+                <option value>Ordre alphabétique</option>
+                <option {{ app.request.get('o') == 'asc' ? 'selected' : '' }} value="asc">A - Z</option>
+                <option {{ app.request.get('o') == 'desc' ? 'selected' : '' }} value="desc">Z - A</option>
+            </select>
+            <select name="a" class="select-p-dark">
+                <option value>Année de production</option>
+                {% for y in getProdYears(1960, 5) %}
+                    <option {{ app.request.get('a') == y ? 'selected' : '' }} value="{{y}}">{{y}}</option>
+                {% endfor %}
+            </select>
+            <select name="g" class="select-p-dark">
+                <option value>Genre</option>
+                {% for g in findAcf('genre-film-serie', -1, {'title':'asc'}) %}
+                    <option {{ app.request.get('g') == g.id ? 'selected' : '' }} value="{{g.id}}">{{g.title}}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </form>
+</div>
+
+<script>
+    AddScript(function(){
+        'use strict';
+        __.dataJs({
+            Filter: {
+                onSubmit: function($form){
+                    var url = $form.attr('action')+$form.serialize();
+                    Ajaxify.getPage(url);
+                }
+            }
+        })
+    })
+</script>

@@ -1,0 +1,18 @@
+{% set title = item.title %}
+{% set href = getPostHref(item) %}
+
+<article class="movie--portrait-sm-3-lines">
+    <figure>
+        <a title="{{title}}" href="{{href}}" class="figure">
+            {{ image(title, acf(item, 'flyers.affiche_en_mode_portrait'), 147, 196, 'c', 'img-thumb img-responsive', [0,0,0])|raw }}
+        </a>
+    </figure>
+    <h3 class="title"><a title="{{title}}" href="{{href}}" class="titleWraper ellipsis lc1 c-p-dark">{{title}}</a></h3>
+    <div class="flex">
+        <div>De</div>
+        {% for u in item.realisateurs %}
+            {% set fullname = getUserFullName(u) %}
+            <a title="{{fullname}}" href="{{ path('readUser',{'username':u.usernameSlugged,'id':u.id}) }}" class="author ellipsis lc1 c-p-dark">{{fullname}}</a>
+        {% endfor %}
+    </div>
+</article>

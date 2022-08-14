@@ -1,0 +1,24 @@
+{% set isOwl = isOwl is defined and isOwl == true %}
+
+{% if isOwl %}<div id="comp__team" class="owl-carousel owl-theme owl-cute-dots">{% endif %}
+
+    {% for item in items %}
+        {{ card('partners', {'item': item}) }}
+    {% endfor %}
+
+{% if isOwl %}
+    </div>
+    <script>
+        AddScript(function(){
+            'use strict';
+            $('#comp__team').owlCarousel({
+                nav: false, dots: true,
+                loop: true,
+                autoplay: true, autoplayHoverPause: true, autoplayTimeout: 5000, autoplaySpeed: 2000,
+                responsive: {
+                    0: {items: 2}, 414: {items: 3}, 768: {items: 4}, 992: {items: 5}, 1200: {items: 6},
+                }
+            })
+        })
+    </script>
+{% endif %}

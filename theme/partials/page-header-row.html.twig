@@ -1,0 +1,7 @@
+{% set breadcrumb = breadcrumb ?? true %}
+<header class="row {{ breadcrumb ? '' : 'mt-10' }}">
+    {{ breadcrumb ? ('<div class="col-md-12">' ~ p('breadcrumb') ~ '</div>')|raw : '' }}
+    <div class="col-md-12 text-center mb-20">
+        <h1 class="text-uppercase mg-auto {{cls??''}}">{{ title|raw }}</h1>
+    </div>
+</header>

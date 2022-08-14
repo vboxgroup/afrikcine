@@ -1,0 +1,10 @@
+{% set title = item.title %}
+
+<article class="movie--play-sm-1-line">
+    <figure>
+        <a title="{{title}}" href="{{getPostHref(item)}}" class="figure">
+            {{ image(title, acf(item, 'flyers.affiche_en_mode_paysage'), 147, 96, 'c', 'img-thumb img-responsive', [0,0,0])|raw }}
+            {{ i('bi:play-circle', 'play-circle bottom-right') }}
+        </a>
+    </figure>
+</article>

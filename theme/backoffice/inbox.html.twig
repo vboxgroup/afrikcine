@@ -1,0 +1,66 @@
+{% extends '@DovStoneSymfonyBlogAdminBundlePairDBBased/base.html.twig' %}
+
+{% import '@DovStoneSymfonyBlogAdminBundlePairDBBased/partials/macros.html.twig' as bundleMacros %}
+
+{% block title %}Messages entrants ({{data.bloggies|length}}){% endblock %}
+
+{% block main %}    
+    
+    {% if data.bloggies is empty %}
+        {{ getBundleEmptyListView('Aucun message reçu.') }}
+    {% else %}
+
+        <div data-loadmore-view>
+            <div class="tiles">
+                <div class="tile">
+                    <div class="content">
+                    <div class="table-responsive">
+
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th data-minmax="20" class="text-center">N°</th>
+                                    <th data-minmax="80" class="text-center">Actions</th>
+                                    <th data-minmax="225">Nom et prénoms</th>
+                                    <th data-minmax="150">Objet</th>
+                                    <th data-minmax="150">Téléphone</th>
+                                    <th data-minmax="225">E-mail</th>
+                                    <th>Message</th>
+                                    <th data-minmax="70" class="text-center" class="text-center">Date</th>
+                                </tr>
+                            </thead>
+                            <tbody data-loadmore-replacement>
+                                {% for b in data.bloggies %}
+                                    <tr>
+                                        <td class="text-center" data-indexify="0"></td>
+                                        <td class="text-center">
+                                            <div class="table-actions cell-container">
+                                                <div class="cell">
+                                                    <a data-undoable="{{ path('_deleteBloggy', {'id': attr(b, '_id')}) }}" data-undoable-parent="tr" title="Supprimer" class="btn btn-xs btn-danger">
+                                                        <i class="fa fa-trash"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>{{ attr(b, 'nom', '<em>non renseigné</em>')|raw }}</td>
+                                        <td>{{ attr(b, 'object', '<em>non renseigné</em>')|raw }}</td>
+                                        <td>{{ attr(b, 'telephone', '<em>non renseigné</em>')|raw }}</td>
+                                        <td>{{ attr(b, 'email', '<em>non renseigné</em>')|raw }}</td>
+                                        <td><div style="white-space:pre-wrap">{{ attr(b, 'message', '<em>non renseigné</em>') }}</div></td>
+                                        <td class="text-center">{{ b._createdAt|date("d/m/Y à H:i") }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+            {{ bundleMacros.loadMore({ 'paginator': data.paginator }) }}
+        </div>
+
+        {{ bundleMacros.loadMore({ 'knpPaginator': data.knpPaginator }) }}
+
+    {% endif %}
+
+{% endblock %}

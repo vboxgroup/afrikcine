@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+{% block main %}
+
+{% set post = pop(getPost()) %}
+{% set default %}
+    <div sg-text-rich>
+        <p>Nmply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's
+            andard dummy text ever since the 1500s, when an unknown printer took a galley of type
+            andser crambled it to make a type specimen book. It has survived not only five centuries,
+            but also the leap into electronic typesetting, remaining.</p>
+    </div>
+{% endset %}
+
+<div class="container-fluid mainContainerFluid news-single">
+
+    {{ p('page-header-row-single') }}
+
+    <div class="row">
+
+        <div class="col-md-8">
+
+            <article>
+                <p class="article-desc">
+                    <em class="badge bg-s">{{post.category.title|upper}}</em>
+                    <em>{{ post.description }}</em>
+                </p>
+                <figure class="article-fig">{{ image(post.title, post.image, 654, 368, 'c', 'img-responsive')|raw }}</figure>
+                <div class="article-content mt-20">{{ getBody(default, true) }}</div>
+            </article>
+
+            <div class="share-wrapper">
+                <div style="margin-right:10px">Partager :</div>
+                {{ comp('share') }}
+            </div>
+
+            <div class="prev-next mt-60">{{ comp('single-prev-next') }}</div>
+
+            {% set films_a_venir = getData('films-a-venir', 5, [['id','in', post.acf.related.films??[]]]) %}
+            {% set serie_a_la_tv = getData('serie', 5, [['id','in', post.acf.related.series??[]]]) %}
+            {% set emissions = getData('emission', 4, [['id','in', post.acf.related.emissions??[] ]]) %}
+            {% if films_a_venir.count>0 or serie_a_la_tv.count>0 or emissions.count>0 %}
+            <div class="related">
+                {{ p('sec-header', {'title':'Contenus associés', 'cls':'linear-g-title linear-w-title'}) }}
+                {{ films_a_venir.count>0 ? s('__films-a-venir',{'data':films_a_venir, 'cls':'mb-10'}) : ''}}
+                {{ serie_a_la_tv.count>0 ? s('__serie-a-la-tv',{'data':serie_a_la_tv, 'cls':'mb-10'}) : ''}}
+                {{ emissions.count>0 ? s('__emissions',{'data':emissions}) : ''}}
+            </div>
+            {% endif %}
+            
+        </div>
+        
+        <div class="col-md-4">
+            <aside>
+                {{ s('__news-categories') }}
+                {{ s('__notre-page-facebook') }}
+                {{ s('__afrikcine-en-continue') }}
+                {{ s('flyer--portrait-lg') }}
+            </aside>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

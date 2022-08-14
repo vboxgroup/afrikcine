@@ -1,0 +1,30 @@
+<section class="panel-target panel-photos mt-5">
+    <div class="panel-row">
+        <div class="row">
+            <div class="col-md-12 initDiapOwl">
+
+                {% for saison in attr(attr(post, 'saisons'), 'items') %}
+                
+                    <div class="saison-photos mb-30">
+                        <h3 class="title">{{ saison.title }}</h3>
+                        <div class="mediaGrids">
+                            {% set seasonsPhotos = [] %}
+                            {% for episode in attr(saison, 'episodes') %}
+                                {% set seasonsPhotos = seasonsPhotos|merge(getMedia(episode, 'photos').photos) %}
+                            {% endfor %}
+                            {{ c('media-grids', {'files':seasonsPhotos}) }}
+                        </div>
+                    </div>
+
+                {% else %}
+
+                    <div class="mediaGrids">
+                        {{ c('media-grids', {'title':post.title, 'files':getMedia(post, 'photos').photos}) }}
+                    </div>
+
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+</section>

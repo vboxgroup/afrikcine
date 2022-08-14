@@ -1,0 +1,100 @@
+{% import 'imports/macros.html.twig' as m %}
+
+{% set appName = getAppEnv('APP_NAME') %}
+{% set infos = getGlobal('infos') %}
+
+<footer id="footer" class="main-footer text-center full-w">
+
+    <div class="container-fluid">
+        <div class="row row-top">
+            <div class="col col-md-4">
+                <h6 class="title">Restons en contact</h6>
+                {{ m.socials() }}
+            </div>
+            <div class="col col-md-4 divider divider-left">
+                {{ m.fbPage() }}
+            </div>
+            <div class="col col-md-4 divider divider-left">
+                {{ m.representatives() }}
+            </div>
+        </div>
+    </div>
+
+    <div class="divider divider-top">
+        <nav>{{ getNav({'nav': 'footer'}) }}</nav>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12"><p class="copyright"><span>©</span> {{getDateTime().format('Y')}} <strong>ASSIBA COM</strong> Tous droits réservés</p></div>
+        </div>
+    </div>
+
+</footer>
+
+<style type="text/less">
+    @p: #26030c;
+    @p-lite: #429cd4;
+    @p-dark: #441600;
+    @s: #f09008;
+    @s-dark: #bb6d00;
+    @g: #f0f2f5;
+    @bcolor: #250c00;
+
+    .main-footer { text-shadow: 0 3px 3px #353535; background: @p-dark; color: #fff; margin-top: 50px; padding-bottom: 20px;
+        a { color: #fff; display: inline-block; font-size: 12px;
+            &:hover { color: #a6a6a6 }
+        }
+        .logo { border: 5px solid @p; margin: -25px 0 15px; padding: 5px; background-color: #fff; }
+        .title { margin-bottom: 25px; padding-top: 20px; font-size: 18px }
+        .row-top {
+            .col { height: 220px }
+            .desc { max-width: 600px; margin: auto }
+        }
+        .divider {
+            &.divider-top { border-top: 1px solid @bcolor }
+            &.divider-bottom { border-bottom: 1px solid @bcolor }
+            &.divider-left { border-left: 1px solid @bcolor }
+        }
+        .macro-socials {
+            a {
+                display: inline-block; margin: 0 2px; height: 45px; width: 45px; border-radius: 100%; border: 3px solid #fff; line-height: 48px;
+                font-size: 28px; color: #fff;
+            }
+        }
+        nav { padding: 22px 0 10px;
+            li {
+                &:not(:first-child) { border-left: 1px solid @bcolor; }
+            }
+            .title { margin-bottom: 0; padding-top: 0 }
+            ul ul, .icon, i, .desc, button { display: none!important }
+        }
+        .copyright { margin: 30px auto 0; font-size: 17px; max-width: 350px; }
+    }
+
+    @media screen and (min-width: 992px)
+    {
+        .main-footer {
+            nav {
+                ul { display: flex; justify-content: center; list-style: none }
+                li { margin: 0 10px; padding-left: 15px }
+                .title { text-transform: inherit }
+            }
+        }
+    }
+
+    @media screen and (max-width: 992px)
+    {
+        .main-footer { padding-bottom: 0;
+            .container { width: 100% }
+            .row-top {
+                .col { height: auto; margin-bottom: 40px }
+                &:not(:last-child) { border-bottom: 1px solid @bcolor }
+            }
+            nav {
+                li { margin: 20px 0; }
+            }
+            .divider { border-left: 0!important; }
+        }
+    }
+</style>

@@ -1,0 +1,22 @@
+{% if attr(data??[], 'items') is not empty %}
+
+    <section class="sec-hero">
+        <div id="heroCarousel" class="owl-carousel owl-theme owl-cute-nav">
+            {% for item in data.items %}
+                <article class="item">
+                    <a href="{{getPostHref(item)}}" class="figure bg-cover">
+                        <figure>
+                            {{ image(item.title, acf(item, 'flyers.affiche_en_mode_paysage'), 1024, 400, 'c', 'img-responsive')|raw }}
+                        </figure>
+                        {{ i('bi:play-circle', 'play-circle') }}
+                        <div class="meta text-center">
+                            <h2 class="title">{{item.title}}</h2>
+                            <p class="desc xs-hidden">{{ellipsisText(item.description)}}</p>
+                        </div>
+                    </a>
+                </article>
+            {% endfor %}
+        </div>
+    </section>
+
+{% endif %}

@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+{% block main %}
+
+<div class="container-fluid mainContainerFluid">
+
+    {{ p('page-header-row',{'title':'News Ciné et Séries'}) }}
+
+    <div class="row">
+        <div class="col-md-8" data-loadmore-view>
+
+            {% set data = getData('news', 5) %}
+            {% set knp = mimicKnpPaginator(data.count, data.limit) %}
+
+            <div class="news-listing" data-loadmore-replacement>
+                {% for item in data.items %}
+                    {{ c('news-listing', {'item':item, 'loop':loop}) }}
+                {% endfor %}
+            </div>
+            
+            {{ p('knp',{'knp':knp}) }}
+            
+        </div>
+        
+        <div class="col-md-4">
+            <aside>
+                {{ s('__news-categories') }}
+                {{ s('__afrikcine-en-continue') }}
+                {{ s('__notre-page-facebook') }}
+                {{ s('flyer--portrait-lg') }}
+            </aside>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

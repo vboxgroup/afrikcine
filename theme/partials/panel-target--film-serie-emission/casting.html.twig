@@ -1,0 +1,136 @@
+{% set episode_saison = app.request.get('episode-saison') %}
+
+{% if post.type == 'serie' %}
+    <form action="{{getCurrentUrlParamsLess()}}" data-js="Filter={change:onSubmit}">
+        <div>
+            <select name="episode-saison" class="select-p-dark w-100">
+                <option value selected disabled>Saisons et épisodes</option>
+                <option disabled>—</option>
+                {# {% for s in post.saisons.items %}
+                    {% set S = acf(s,'props.numero_de_la_saison') %}
+                    {% for e in s.episodes %}
+                        {% set E = acf(e,'props.numero_episode') %}
+                        {% set v = E~';'~S %}
+                        <option {{ episode_saison == v ? 'selected' : '' }} value="{{v}}">
+                            E{{E}} — S{{S}} (Episode {{E}} — Saison {{S}})
+                        </option>
+                    {% endfor %}
+                {% endfor %} #}
+
+                {% for s in post.saisons.items %}
+                    {% set S = acf(s,'props.numero_de_la_saison') %}
+                    <optgroup label="Saison {{S}}">
+                        {% for e in s.episodes %}
+                            {% set E = acf(e,'props.numero_episode') %}
+                            {% set v = E~'-'~S %}
+                            <option {{ episode_saison == v ? 'selected' : '' }} value="{{v}}">Episode {{E}}</option>
+                        {% endfor %}
+                    </optgroup>
+                {% endfor %}
+
+            </select>
+        </div>
+    </form>
+{% endif %}
+
+{% if post.type != 'serie' or (post.type == 'serie' and episode_saison is not null) %}
+
+    {% macro _(title, jobs, post, key, customKey) %}
+        {% set id = uId() %}
+        <section class="panel-target panel-casting panel-casting-inline panel-{{id}}">
+            <header><h2 class="panel-main-title linear-g-title mt-5">{{title}}</h2></header>
+            {% set key = key ? key~'.' : key %}
+            <div class="panel-row">
+                <table class="table table-striped comma-table">
+                    <tbody>
+                        {% for job in jobs %}
+                            {% set users = attr(post, customKey ? customKey : key ~ getSlug(job, '_')) %}
+                            {% if users is not empty %}
+                                <tr>
+                                    <td style="width:190px" class="text-capitalize">{{job}}</td>
+                                    <td class="comma-sep">
+                                        {% for u in users %}
+                                            {{ c('username',{'user':u}) }}
+                                        {% endfor %}
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    {% endmacro %}
+    
+    {% if post.type == 'serie' %}
+        {% set es = episode_saison|split('-') %}
+        {% set E = es[0]??1 %}
+        {% set S = es[1]??1 %}
+
+        {% set serieId = post.id %}
+        {% set saison = findBy('b',[
+            ['type','==','serie-saison'],
+            ['acf.props.numero_de_la_saison','==',S],
+            ['acf.props.parent','==',serieId]
+        ],{},1) %}
+
+        {% set episode = getData('serie-episode',1,[
+            ['acf.props.saison','==',attr(saison,'id')],
+            ['acf.props.numero_episode','==',E]
+        ]) %}
+
+        {% set post = episode %}
+
+    {% endif %}
+
+    <section class="panel-target panel-casting">
+        <header><h2 class="panel-main-title linear-g-title mt-5">Réalisation</h2></header>
+        <div class="panel-row">
+            <div class="row">
+                {% for u in attr(post, 'realisateurs') %}
+                    {{ c('profile',{'user':u}) }}
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <section class="panel-target panel-casting mt-20">
+        <header><h2 class="panel-main-title linear-g-title">Acteurs/Actrices</h2></header>
+        <div class="panel-row">
+            <div class="row">
+                {% for u in attr(post, 'acteurs') %}
+                    {{ c('profile',{'user':u}) }}
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    {{ _self._('Scénario', ['Scénaristes', 'Dialoguistes', 'Script Doctors'], post, 'scenarios') }}
+
+    {{ _self._('Production', ['Producteurs', 'Producteurs Exécutifs', 'Producteurs Délégués', 'Producteurs Associés'], post, 'production') }}
+
+    {{ _self._('Sociétés', ['Distributeurs', 'Producteurs Exécutifs', 'Diffuseurs', 'Co-production'], post, 'societes') }}
+
+    {{ _self._('Equipe Technique', ['Accessoiristes', 'Assistants accessoiristes', 'Opérateurs', 'Assistants opérateurs', 'Assistants réalisateurs', 'Ingénieurs son', 'Assistants ingénieurs son', 'Cameramen (cadreurs)', 'Costumiers', 'Assistants costumiers', 'Électriciens', 'Assistants électriciens', 'Machinistes', 'Assistants machinistes', 'Maquilleurs', 'Assistants maquilleurs', 'Photographes de plateau', 'Régisseurs', 'Assistants régisseurs', 'Scripts', 'Cascadeurs', 'Monteurs', 'Assistants monteurs', 'Etalonneurs', 'Compositeurs', 'Attachés de presse', 'Auteurs', 'Directeurs de casting', 'Consultants', 'Décorateurs', 'Assistants décorateurs', 'Story boarders'], post, 'equipe_technique') }}
+
+{% endif %}
+
+<script>
+    AddScript(function(){
+        'use strict';
+        __.dataJs({
+            Filter: {
+                onSubmit: function($form){
+                    var url = $form.attr('action')+`?panel=${__.getUrlVar('panel')}&${$form.serialize()}`;
+                    Ajaxify.getPage(url);
+                }
+            }
+        })
+        $.map($('.panel-casting-inline'), function(panel){
+            var $panel = $(panel);
+            if(!$panel.find('tr').length){
+                $panel.hide();
+            }
+        })
+    })
+</script>

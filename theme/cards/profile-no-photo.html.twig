@@ -1,0 +1,6 @@
+{% set username = getUserFullName(user) %}
+{% set href = path('readUser',{'username':user.usernameSlugged,'id':user.id}) %}
+
+<article class="card-profile">
+    <h4 class="username"><a href="{{href}}" class="ellipsis lc1">{{username}}</a></h4>
+</article>

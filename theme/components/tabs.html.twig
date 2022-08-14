@@ -1,0 +1,12 @@
+<nav class="component--tab ff-oswald text-uppercase" role="navigation">
+    {% for title, data in items %}
+        {% set href = data.href %}
+        <a class="{{-
+            (
+                withQuery is defined and withQuery == true
+                ? getCurrentUrl()|replace({'&_ajaxify=true':''})
+                : getCurrentUrlParamsLess()
+            ) == href ? 'active' : ''
+        }} active--pulse" href="{{ href }}">{{title}}</a>
+    {% endfor %}
+</nav>

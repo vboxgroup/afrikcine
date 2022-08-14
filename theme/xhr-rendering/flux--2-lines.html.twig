@@ -1,0 +1,17 @@
+{{ noXHR is defined ? '<div class="flux--2-lines-wrapper">' : '' }}
+
+{% if attr(data??[], 'items') is not empty %}
+    {% for item in data.items %}
+
+        {% set title = item.title %}
+
+        <div class="flux-2-lines">
+            <a href="{{getPostHref(item.category)}}" class="category c-black bold text-uppercase">{{item.category.title}}</a>
+            -
+            <a href="{{getPostHref(item)}}" title="{{title}}" class="title c-black">{{title}}</a>
+        </div>
+
+    {% endfor %}
+{% endif %}
+
+{{ noXHR is defined ? '</div>' : '' }}

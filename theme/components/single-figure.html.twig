@@ -1,0 +1,9 @@
+{% set post = getPost() %}
+{% set image = attr(post, '_image') %}
+
+<div class="single-figure">
+    <figure>
+        <div class="blur" style="background: url({{image}}) center center / cover no-repeat"></div>
+        <img class="img vam" src="{{image}}">
+    </figure>
+</div>

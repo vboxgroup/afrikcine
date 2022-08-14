@@ -1,0 +1,46 @@
+{% set item = post ?? getPost() %}
+
+{% if item.type in ['news', 'emission'] %}
+    {% set hero %}
+        <figure class="figure bg-cover">
+            {{ image(item.title, attr(item, 'image'), 1024, 350, 'r', 'img-responsive', [0,0,0])|raw }}
+            {{ i('bi:play-circle', 'play-circle') }}
+        </figure>
+    {% endset %}
+
+{% else %}
+    {% set portrait = acf(item, 'flyers.affiche_en_mode_portrait', attr(item, 'image')) %}
+    {% set landscape = acf(item, 'flyers.affiche_en_mode_paysage', attr(item, 'image')) %}
+    {% set hero %}
+        <div class="hero-portrait-landscape flex">
+            <div class="hero-portrait xs-hidden">
+                <figure class="figure bg-cover">
+                    {{ image(item.title, portrait, 250, 350, 'c', 'img-responsive', [0,0,0])|raw }}
+                </figure>
+            </div>
+            <div class="hero-landscape">
+                <figure class="figure bg-cover">
+                    {{ image(item.title, landscape, 1024 - 250, 350, 'c', 'img-responsive', [0,0,0])|raw }}
+                    {{ i('bi:play-circle', 'play-circle') }}
+                </figure>
+            </div>
+        </div>
+    {% endset %}
+{% endif %}
+
+<section class="single-hero">
+    <div class="container-fluid text-center breadcrumb-container">
+        <div class="row">
+            <div class="col-md-12">{{ p('breadcrumb') }}</div>
+        </div>
+    </div>
+    {# <div class="sec-hero">
+        {{ hero }}
+    </div> #}
+    <div class="singleMetaWrapper">
+        <div class="singleTitleWrapper"><h1 class="title no-mg text-center">{{item.title}}</h1></div>
+        <div class="singleScrollableWrapper">
+            {{ p('single-panel-scrollable',{'items':panelItems|slice(1,panelItems|length)}) }}
+        </div>
+    </div>
+</section>

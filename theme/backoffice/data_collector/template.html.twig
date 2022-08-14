@@ -1,0 +1,35 @@
+{% extends '@WebProfiler/Profiler/layout.html.twig' %}
+
+{% block toolbar %}
+    {% set icon %}
+        {# this is the content displayed as a panel in the toolbar #}
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="1em" height="1em" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path d="M12 4c2.21 0 4 1.79 4 4s-1.79 4-4 4s-4-1.79-4-4s1.79-4 4-4zm0 16s8 0 8-2c0-2.4-3.9-5-8-5s-8 2.6-8 5c0 2 8 2 8 2z" fill="#626262"/><rect x="0" y="0" width="24" height="24" fill="rgba(0, 0, 0, 0)" /></svg>
+        <span class="sf-toolbar-value">{% if collector.User %}{{ collector.User._username }}{% else %}Anonymous{% endif %}</span>
+    {% endset %}
+
+    {% if collector.User %}
+        {% set text %}
+            <div class="sf-toolbar-info-piece">
+                <b style="color:#fff">Authenticated</b>
+            </div>
+            <div class="sf-toolbar-info-piece">
+                <b>Id</b>
+                <span class="sf-toolbar-status ">{{ collector.User._id }}</span>
+            </div>
+            <div class="sf-toolbar-info-piece">
+                <b>Username</b>
+                <span class="sf-toolbar-status ">{{ collector.User._username }}</span>
+            </div>
+            <div class="sf-toolbar-info-piece">
+                <b>Roles</b>
+                <span class="sf-toolbar-status ">
+                   [ {{ collector.User._roles|join(',', ' - ') }} ]
+                </span>
+            </div>
+        {% endset %}
+    {% endif %}
+
+    {# the 'link' value set to 'false' means that this panel doesn't
+       show a section in the web profiler #}
+    {{ include('@WebProfiler/Profiler/toolbar_item.html.twig', { link: false }) }}
+{% endblock %}

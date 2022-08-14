@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+{% block main %}
+
+{% set post = pop(getPost()) %}
+{% set panelItems = ["Index", "Casting", "Photos", "Vidéos", "Saisons et Épisodes", "News"] %}
+
+{{ c('single-hero', { 'panelItems': panelItems, 'post': post }) }}
+
+<div class="container-fluid mainContainerFluid">
+
+    <div class="row">
+
+        <div class="col-md-8 mt-15">
+            {% for item in panelItems %}
+                {% set slug = getSlug(item) %}
+                <div id="panel_target_{{slug}}" class="panel-target-single panel-target {{loop.index>1?'hidden':''}}">
+                    {{ p('panel-target--film-serie-emission/'~slug, {post:post}) }}
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="col-md-4 mt-20">
+            <aside>
+                {{ s('__notre-page-facebook') }}
+                {{ s('__afrikcine-en-continue') }}
+                {{ s('flyer--portrait-lg') }}
+            </aside>
+        </div>
+        
+    </div>
+
+</div>
+
+<style>
+    .breadcrumb-container { background: #26030c }
+    .breadcrumb-container a:hover { color: #fff }
+</style>
+
+
+{% endblock %}

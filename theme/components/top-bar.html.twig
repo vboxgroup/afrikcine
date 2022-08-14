@@ -1,0 +1,29 @@
+{% import 'imports/macros.html.twig' as macros %}
+
+{% set infos = findAcf('infos', 1) %}
+
+<div class="component--top-bar">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-10">
+                <div id="top_links" class="links">
+                    <a>{{i('clarity:map-marker-line')}}<span>{{ acf(infos, 'info.geo') }}</span></a>
+                    <a href="mailto:{{ acf(infos, 'info.email_1') }}">{{i('bx:bx-paper-plane')}}<span>{{ acf(infos, 'info.email_1') }}</span></a>
+                    <a href="tel:{{ acf(infos, 'info.tel') }}">{{i('mdi:phone-classic')}}<span>{{ acf(infos, 'info.tel') }}</span></a>
+                    {% if User is null %}
+                        <a href="{{getUrl('user?panel=signin')}}">{{i('teenyicons:signin-outline')}}<span>Créer un compte</span></a>
+                        <a href="{{getUrl('user?panel=login')}}">{{i('ant-design:login-outlined')}}<span>Se connecter</span></a>
+                    {% else %}
+                        <a href="{{getUrl('user?panel=info')}}">{{i('carbon:user-avatar-filled')}}<span>Mon compte</span></a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-xs-2">
+                <div class="top-right">
+                    {#<div>Certifiée: ISO 9001:2020</div>#}
+                    {{ macros.socials() }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,18 @@
+{% set href = getPostHref(item) %}
+{% set page = app.request.get('page') ?? 1 %}
+{% set isLg = loop.index % 3 == 1 %}
+{% set hits = getHits(item) %}
+{% set s = hits > 1 ? 's' : '' %}
+
+<article class="card-news {{ isLg ? 'lg' : 'sm' }}">
+    <figure><a href="{{href}}">{{ image(item.title, item.image, (isLg?650:650/2), (isLg?350:350/2+0.9), 'c', 'img-thumb img-responsive')|raw }}</a></figure>
+    <div class="meta">
+        <div class="d-flex align-items-center">
+            <div class="category text-uppercase">News - {{item.category.title}}</div>
+            <div class="date ml-20">{{ getFrenchDate(item.createdAt, 'd/M/Y') }}</div>
+            <div class="hits ml-20" title="{{hits}} vue{{s}}"><i class="fa fa-eye"></i> {{hits}}</div>
+        </div>
+        <h2 class="title mt-10"><a href="{{href}}">{{item.title}}</a></h2>
+        <p class="desc ellipsis lc5">{{item.description}}</p>
+    </div>
+</article>

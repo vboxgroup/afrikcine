@@ -1,0 +1,87 @@
+{% macro bodyClsName(preloading = true) %}
+    {{- isXHR() == false ? (preloading ? 'preloading ' : '') : ''}}
+{% endmacro %}
+
+{% macro socials(arg) %}
+
+    {% set clsNames = arg.classNames ?? '' %}
+    {% set infos = findAcf('infos', 1) %}
+    {% set wh = acf(infos, 'info.wh') %}
+    {% set fb = acf(infos, 'info.fb') %}
+    {% set yt = acf(infos, 'info.yt') %}
+    {% set lin = acf(infos, 'info.in') %}
+    {% set tt = acf(infos, 'info.tt') %}
+
+    <div class="macro-socials">
+        {% if wh != '.' %}<a title="WhatsApp" class="no-ajaxify whatsapp active--pulse {{clsNames}}" href="whatsapp://send?text={{arg.wh.smsBody ?? 'Bonjour Monsieur.'}}&phone={{wh}}">{{i('fa-brands:whatsapp')}}</a>{% endif %}
+        {% if fb != '.' %}<a title="Facebook" class="no-ajaxify facebook active--pulse {{clsNames}}" href="{{fb}}" target="blank">{{i('bx:bxl-facebook')}}</a>{% endif %}
+        {% if yt != '.' %}<a title="YouTube" class="no-ajaxify youtube active--pulse {{clsNames}}" href="{{yt}}" target="blank">{{i('bx:bxl-youtube')}}</span></a>{% endif %}
+        {% if lin != '.' %}<a title="LinkedIn" class="no-ajaxify linkedin active--pulse {{clsNames}}" href="{{lin}}" target="blank">{{i('bx:bxl-linkedin')}}</a>{% endif %}
+        {% if tt != '.' %}<a title="Twitter" class="no-ajaxify twitter active--pulse {{clsNames}}" href="{{tt}}" target="blank"><span class="iconify" data-icon="ant-design:twitter-outlined" data-inline="false"></span></a>{% endif %}
+    </div>
+    <style type="text/less">
+        .macro-socials {
+            a { display: inline-flex; font-size: 20px; border-radius: 100%; align-items: center; justify-content: center; color: #000 }
+        }
+    </style>
+{% endmacro %}
+
+{% macro fbPage(arg) %}
+    <div class="facebook-page">
+        <h6 class="title">Notre page Facebook</h6>
+        <div class="iframe-wrapper" style="background:#fff;width:280px;height:131px;margin:auto">
+            <iframe _src="https://www.facebook.com/plugins/page.php?href={{ arg.href ?? 'https%3A%2F%2Fwww.facebook.com%2Fafrikcinemas' }}&tabs=timeline&width=280&height=500&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId" width="100%" height="100%" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true" allow="encrypted-media"></iframe>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro representatives(arg) %}
+    <div class="facebook-page">
+        <h6 class="title">Afrikcine Représentation</h6>
+        <div>...</div>
+    </div>
+{% endmacro %}
+
+{% macro disqus(arg) %}
+    {% set DISQUS_COMMENTS_API_KEY = getAppEnv("DISQUS_COMMENTS_API_KEY") %}
+    <div id="disqus_component" class="disqus-component text-center">
+        <div id="disqus_thread" class="disqus-thread"></div>
+    </div>
+    <script>
+        (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document, s = d.createElement('script');
+            s.src = 'https://{{ DISQUS_COMMENTS_API_KEY }}.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+{% endmacro %}
+
+{% macro loadMore(items, setScript=true) %}
+
+    {{ getCDN([ 'swagg/services/loadmore' ], 'js') }}
+    
+    <div class="dp-table mg-auto text-center">
+        {% if items.getPaginationData().next is defined %}
+            <a data-loadmore-btn="loadmore__btn" class="btn bttn bttn-primary-dark radius-0">Charger plus ↓</a>
+        {% endif %}
+        {% set knpStructure = knp_pagination_render(items, getKnpTplPath()) %}
+        <div data-loadmore-pagination class="data-loadmore-pagination hidden_">{{ knpStructure|raw }}</div>
+    </div>
+    <style>
+        .data-loadmore-pagination nav { display: table; margin: auto }
+    </style>
+    
+    {% if setScript == true %}
+        <script>
+            AddScript(function(){
+                LoadMore.init({
+                    onUpdated: function () {
+                        LazyLoading.scanDOM();
+                    }
+                });
+            });
+        </script>
+    {% endif %}
+{% endmacro %}

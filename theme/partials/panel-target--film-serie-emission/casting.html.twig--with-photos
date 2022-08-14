@@ -1,0 +1,90 @@
+<section class="panel-target panel-casting">
+    <header><h2 class="panel-main-title linear-g-title mt-5">Réalisation</h2></header>
+    <div class="panel-row">
+        <div class="row">
+            {% for u in attr(post, 'realisateurs') %}
+                {{ c('profile',{'user':u}) }}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="panel-target panel-casting">
+    <header><h2 class="panel-main-title linear-g-title mt-5">Scénarios</h2></header>
+    {% for job in ['Scénaristes', 'Dialoguistes', 'Script Doctors'] %}
+    <div class="panel-row">
+        <header><h3 class="title">{{job}}</h3></header>
+        <div class="row">
+            {% for u in attr(post, 'scenarios.'~getSlug(job, '_')) %}
+                {{ c('profile',{'user':u}) }}
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+</section>
+
+<section class="panel-target panel-casting mt-20">
+    <header><h2 class="panel-main-title linear-g-title">Acteurs/Actrices</h2></header>
+    <div class="panel-row">
+        <div class="row">
+            {% for u in attr(post, 'acteurs') %}
+                {{ c('profile',{'user':u}) }}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="panel-target panel-casting">
+    <header><h2 class="panel-main-title linear-g-title mt-5">Production</h2></header>
+    {% for job in ['Producteurs', 'Producteurs Exécutifs', 'Producteurs Délégués', 'Producteurs Associés'] %}
+        {% set items = attr(post, 'production.'~getSlug(job, '_')) %}
+        {% if items is not empty %}
+            <div class="panel-row">
+                <header><h3 class="title">{{job}}</h3></header>
+                <div class="row">
+                    {% for u in items %}
+                        {{ c('profile',{'user':u}) }}
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+</section>
+
+<section class="panel-target panel-casting">
+    <header><h2 class="panel-main-title linear-g-title mt-5">Sociétés</h2></header>
+    {% for job in ['Distributeurs', 'Producteurs Exécutifs', 'Diffuseurs', 'Co-production'] %}
+        {% set items = attr(post, 'societes.'~getSlug(job, '_')) %}
+        {% if items is not empty %}
+            <div class="panel-row">
+                <header><h3 class="title">{{job}}</h3></header>
+                <div class="row">
+                    {% for u in items %}
+                        {{ c('profile',{'user':u}) }}
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+</section>
+
+<section class="panel-target panel-casting">
+    <header><h2 class="panel-main-title linear-g-title mt-5">Equipe Technique</h2></header>
+    {% for job in
+        ['Accessoiristes', 'Assistants accessoiristes', 'Opérateurs', 'Assistants opérateurs', 'Assistants réalisateurs', 'Ingénieurs son', 'Assistants ingénieurs son', 'Cameramen (cadreurs)', 'Costumiers', 'Assistants costumiers', 'Électriciens', 'Assistants électriciens', 'Machinistes', 'Assistants machinistes', 'Maquilleurs', 'Assistants maquilleurs', 'Photographes de plateau', 'Régisseurs', 'Assistants régisseurs', 'Scripts', 'Cascadeurs', 'Monteurs', 'Assistants monteurs', 'Etalonneurs', 'Compositeurs', 'Attachés de presse', 'Auteurs', 'Directeurs de casting', 'Consultants', 'Décorateurs', 'Assistants décorateurs', 'Story boarders']
+    %}
+    {% set items = attr(post, 'equipe_technique.'~getSlug(job, '_')) %}
+        {% if items is not empty %}
+            <div class="panel-row">
+                <header><h3 class="title text-capitalize">{{job}}</h3></header>
+                <div class="row">
+                    <div class="col-xs-12 profile-no-photo-wrapper">
+                        {% for u in items %}
+                            {{ c('profile-no-photo',{'user':u}) }}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+</section>

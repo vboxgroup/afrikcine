@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+{% block main %}
+
+{% set data = getData('emission', 6) %}
+
+<div class="container-fluid mainContainerFluid">
+
+    {{ p('breadcrumb') }}
+
+    {% if data.count > 0 %}
+
+        <div class="row mt-5">
+            <div class="features--3-cols-wrapper">
+                {% for item in data.items %}
+                    {{ c('features--3-cols', {item: item}) }}
+                {% endfor %}
+            </div>
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

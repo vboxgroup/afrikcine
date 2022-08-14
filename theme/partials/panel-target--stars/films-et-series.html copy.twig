@@ -1,0 +1,157 @@
+<a href="http://localhost/afrikcine.com/stars/trasy-siata-41273369?panel=films-et-series">Reload</a>
+
+{% set realData = getData('film', 10, [
+
+    ['acf.realisateurs.listing','contains',user.id]
+
+], {'acf.dates.date_de_sortie':'desc'}) %}
+{% set knp = mimicKnpPaginator(realData.count, realData.limit) %}
+{% if realData.count > 0  %}
+    <section class="panel-target mt-30 mb-30">
+        <header><h2 class="panel-main-title linear-g-title mt-5">Réalisateur</h2></header>
+        <div class="panel-row">
+            <div class="row">
+                <div class="col-xs-12" data-loadmore-view>
+
+                    <div class="listing">
+                        <table class="table">
+                            <thead>
+                                <tr class="text-uppercase">
+                                    <th data-minmax="80" class="text-center">Année</th>
+                                    <th>Titre</th>
+                                    <th data-minmax="200">Métier(s)</th>
+                                </tr>
+                            </thead>
+                            <tbody data-loadmore-replacement>
+                                {% for item in realData.items %}
+                                    <tr>
+                                        <td class="text-center">{{date(acf(item, 'dates.date_de_sortie')).format('Y')}}</td>
+                                        <td><a href="{{getPostHref(item)}}" class="c-p-dark">{{item.title}}</a></td>
+                                        <td>Réalisateur</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                
+                    {{ p('knp',{'knp':knp}) }}
+
+                </div>
+            </div>
+        </div>
+    </section>
+{% endif  %}
+
+
+{% set scenariosData = getData('film', 10, [
+
+    ['acf.scenarios.scenaristes','contains',user.id],'or',
+    ['acf.scenarios.dialoguistes','contains',user.id],'or',
+    ['acf.scenarios.script_doctors','contains',user.id]],
+
+{'acf.dates.date_de_sortie':'desc'}) %}
+{% set knp = mimicKnpPaginator(scenariosData.count, scenariosData.limit) %}
+{% if scenariosData.count > 0  %}
+    <section class="panel-target mt-30 mb-30">
+        <header><h2 class="panel-main-title linear-g-title mt-5">Scénarios</h2></header>
+        <div class="panel-row">
+            <div class="row">
+                <div class="col-xs-12" data-loadmore-view>
+
+                    <div class="listing">
+                        <table class="table">
+                            <thead>
+                                <tr class="text-uppercase">
+                                    <th data-minmax="80" class="text-center">Année</th>
+                                    <th>Titre</th>
+                                    <th data-minmax="200">Métier(s)</th>
+                                </tr>
+                            </thead>
+                            <tbody data-loadmore-replacement>
+                                {% for item in scenariosData.items %}
+                                    <tr>
+                                        <td class="text-center">{{date(acf(item, 'dates.date_de_sortie')).format('Y')}}</td>
+                                        <td><a href="{{getPostHref(item)}}" class="c-p-dark">{{item.title}}</a></td>
+                                        <td class="comma-sep">
+                                            {{ (user.id in acf(item, 'scenarios.scenaristes') ? '<span>Scénariste</span>')|raw }}
+                                            {{ (user.id in acf(item, 'scenarios.dialoguistes') ? '<span>Dialoguiste</span>')|raw }}
+                                            {{ (user.id in acf(item, 'scenarios.script_doctors') ? '<span>Script Doctor</span>')|raw }}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                
+                    {{ p('knp',{'knp':knp}) }}
+
+                </div>
+            </div>
+        </div>
+    </section>
+{% endif  %}
+
+{#
+
+
+{% set criteria = [[
+    ['acf.realisateurs.listing','contains',user.id],'or',
+    ['acf.acteurs_actrices.listing','contains',user.id],'or',
+
+    ['acf.scenarios.scenaristes','contains',user.id],'or',
+    ['acf.scenarios.dialoguistes','contains',user.id],'or',
+    ['acf.scenarios.script_doctors','contains',user.id],'or',
+
+    ['acf.production.producteurs','contains',user.id],'or',
+    ['acf.production.producteurs_executifs','contains',user.id],'or',
+    ['acf.production.producteurs_delegues','contains',user.id],'or',
+    ['acf.production.producteurs_associes','contains',user.id]
+]] %}
+
+{% set data = getData('film', 2, criteria) %}
+{% set knp = mimicKnpPaginator(data.count, data.limit) %}
+<section class="panel-target mt-30 mb-30">
+    <header><h2 class="panel-main-title linear-g-title mt-5">Films</h2></header>
+    <div class="panel-row">
+        <div class="row">
+            <div class="col-xs-12" data-loadmore-view>
+
+                <div class="listing" data-loadmore-replacement>
+                    {% for film in data.items %}
+                        {{ c('film-serie--listing', {'item':film}) }}
+                    {% else %}
+                        {{ p('no-match', { 'title':'Aucun Film trouvé', 'content':"Il n'y a actuellement aucun film associé à cette Star" }) }}
+                    {% endfor %}
+                </div>
+                
+                {{ p('knp',{'knp':knp}) }}
+
+            </div>
+        </div>
+    </div>
+</section>
+
+{% set data = getData('serie', 2, criteria) %}
+{% set knp = mimicKnpPaginator(data.count, data.limit) %}
+<section class="panel-target mb-30">
+    <header><h2 class="panel-main-title linear-g-title mt-5">Séries</h2></header>
+    <div class="panel-row">
+        <div class="row">
+            <div class="col-xs-12" data-loadmore-view>
+
+                <div class="listing" data-loadmore-replacement>
+                    {% for film in data.items %}
+                        {{ c('film-serie--listing', {'item':film}) }}
+                    {% else %}
+                        {{ p('no-match', { 'title':'Aucune Série trouvée', 'content':"Il n'y a actuellement aucune série associée à cette Star" }) }}
+                    {% endfor %}
+                </div>
+                
+                {{ p('knp',{'knp':knp}) }}
+
+            </div>
+        </div>
+    </div>
+</section>
+
+#}

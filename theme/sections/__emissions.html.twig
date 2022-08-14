@@ -1,0 +1,14 @@
+{% if data.count > 0 %}
+
+    <div class="row">
+        <div class="col-md-12 mb-10">{{ p('sec-header', {title:'Emissions', cls:cls??'linear-g-title'}) }}</div>
+        <div class="features--3-cols-wrapper flex2-xs mb-10">
+            {% for item in data.items %}
+                {{ c('features--3-cols', { item: item }) }}
+            {% endfor %}
+        </div>
+    </div>
+    
+    {{ p('sec-see-more', {title:"Toutes nos émissions", link: getUrl('emissions')}) }}
+
+{% endif %}

@@ -1,0 +1,39 @@
+{% set items = findAcf('temoignages') %}
+
+<section class="sec-testimonies">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div id="testimonies" class="owl-carousel owl-theme owl-cute-dots">
+                    {% for item in items %}
+                        <div class="flex">
+                            <figure class="figure" style="background:url({{item.image}})">
+                                {#<img alt="{{item.title}}" src="{{item.image}}" class="hidden">#}
+                            </figure>
+                            <div class="meta">
+                                <div class="citation">
+                                    <div class="quote top text-left">{{i('entypo:quote')}}</div>
+                                    <p class="desc">{{item.description}}</p>
+                                    <div class="quote bot text-right">{{i('entypo:quote')}}</div>
+                                </div>
+                                <p class="author ff-staatliches">{{item.title}}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    AddScript(function(){
+        'use strict';
+        $('#testimonies').owlCarousel({
+            items: 1,
+            nav: false, dots: true,
+            loop: true,
+            autoplay: true, autoplayHoverPause: true, autoplayTimeout: 5000, autoplaySpeed: 2000
+        })
+    })
+</script>

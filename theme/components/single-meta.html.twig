@@ -1,0 +1,31 @@
+{% import 'imports/macros.html.twig' as macros %}
+
+{% set post = getPost() %}
+{% set timeFull = getFrenchDate(attr(post, '_createdAt'), 'D/d/M/Y à H:i:s') %}
+{% set time = attr(post, '_createdAt')|date('d/m/Y H:i') %}
+{% set uTimeFull = getFrenchDate(attr(post, '_udaptedAt'), 'D/d/M/Y à H:i:s') %}
+{% set uTime = attr(post, '_udaptedAt')|date('d/m/Y H:i') %}
+
+{% set comp = {
+    'tag': (categoryTag ?? '' ~ themeTag ?? '' ~ secteurTag ?? '')|raw,
+    'figure': comp('single-figure'),
+    'title': '<h1 class="title">'~ (paysString ?? '')|raw ~ attr(post, '_title') ~'</h1>',
+    'datetime': '
+        <div class="datetime">
+            <div title="'~ timeFull ~'">Publication: '~ time ~'</div>
+            <div title="'~ uTimeFull ~'">Mise à jour: '~ uTime ~'</div>
+        </div>
+    ',
+    'share': macros.share(),
+    'desc': '<p class="desc"><em>'~ attr(post, '_description') ~'</em></p>'
+} %}
+
+<div class="single-meta text-center">
+
+    {% for k in data ?? [] %}
+        {% if comp[k] is defined %}
+            {{ comp[k]|raw }}
+        {% endif %}
+    {% endfor %}
+
+</div>

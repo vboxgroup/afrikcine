@@ -1,0 +1,28 @@
+<section class="panel-target panel-videos mt-5">
+    <div class="panel-row">
+        <div class="row">
+            <div class="col-md-12 initDiapOwl">
+
+                {% for saison in attr(attr(post, 'saisons'), 'items') %}
+                
+                    <div class="saison-videos mb-30">
+                        <h3 class="title">{{ saison.title }}</h3>
+                        <div class="row">
+                            {% for episode in attr(saison, 'episodes') %}
+                                {{ c('media-grids-cols', {'title':post.title, 'files':getMedia(episode, 'videos').videos, 'isYT':true}) }}
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                {% else %}
+
+                    <div class="row">
+                        {{ c('media-grids-cols', {'title':post.title, 'files':getMedia(post, 'videos').videos, 'isYT':true}) }}
+                    </div>
+
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+</section>

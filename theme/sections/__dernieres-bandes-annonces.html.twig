@@ -1,0 +1,23 @@
+{% set data = getData('dernieres-bandes-annonces', 5) %}
+
+{% if data.count > 0 %}
+    <div class="dernieres-bandes-annonces {{cls??''}}">
+        <div class="mb-10">
+            {{ p('sec-header', {title:'Dernières bandes annonces', cls:'mt-0 linear-g-title'}) }}
+        </div>
+
+        <div class="movie--play-lg-1-line-wrapper">
+            {% for item in data.items|slice(0, 1) %}
+                {{ c('movie--play-lg-1-line', {item:item}) }}
+            {% endfor %}
+        </div>
+
+        <div class="flex4 movie--play-sm-1-line-wrapper owl-carousel owl-theme owl-cute-nav">
+            {% for item in data.items|slice(1, 4) %}
+                {{ c('movie--play-sm-1-line', {item:item}) }}
+            {% endfor %}
+        </div>
+        
+        {{ p('sec-see-more', {link:getUrl('news')}) }} 
+    </div>
+{% endif %}

@@ -1,0 +1,23 @@
+<div id="jumbo" class="owl-carousel owl-theme owl-cute-nav">
+    {% for item in items %}
+        <article class="card card-jumbo _has-overlay" style="background:url({{item.src}}) center center / cover no-repeat">
+            <div class="meta">
+                <h2 class="title ff-inconsolata ellipsis lc5">{{item.desc}}</h2>
+                <p class="desc hidden">{{item.desc}}</p>
+                <a href="{{getUrl('a-propos')}}" class="btn btn-lg bttn-primary ff-gluten hidden">Mieux nous connaitre &rarr;</a>
+            </div>
+        </article>
+    {% endfor %}
+</div>
+
+<script>
+    AddScript(function(){
+        'use strict';
+        $('#jumbo').owlCarousel({
+            items: 1,
+            nav: true, dots: false,
+            loop: true,
+            autoplay: true, autoplayHoverPause: true, autoplayTimeout: 5000, autoplaySpeed: 2000
+        })
+    })
+</script>

@@ -1,0 +1,16 @@
+<section class="sec jumbo-grid">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="grids">
+                    {% for item in items %}
+                        <a href="{{getPostHref(item)}}" style="background-image:url({{ item.image }})">
+                            <h2 class="title has-transition ellipsis lc3">{{item.title}}</h2>
+                        </a>
+                    {% endfor %}
+                    {% for i in 1..5-items|length %}<a class="sm-hidden"></a>{% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

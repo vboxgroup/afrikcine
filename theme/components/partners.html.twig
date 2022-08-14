@@ -1,0 +1,35 @@
+<div id="partner" class="initDiapOwl owl-inline-partner owl-carousel owl-theme owl-cute-dots">
+    {% for item in items %}
+        {% set title = item.title %}
+        {% set img = item.image %}
+        <article
+            _data-diapowl="{{ {'image':img,'caption':title}|json_encode }}"
+            data-js="App={click:initDiapOwl}"
+            title="{{title}}"
+        >
+            <a data-href="{{img}}" class="figure cursor-pointer" style="background-image:url({{img}})">
+                <span class="hidden">{{title}}</span>
+            </a>
+            <a data-href="{{img}}" class="cursor-pointer"><h3 class="title">{{title}}</h3></a>
+        </article>
+    {% endfor %}
+</div>
+
+<script>
+    AddScript(function(){
+        'use strict';
+        $('#partner').owlCarousel({
+            nav: false, dots: true,
+            loop: true,
+            autoplay: true, autoplayHoverPause: true, autoplayTimeout: 5000, autoplaySpeed: 2000,
+            margin: 10,
+            responsive: {
+                0: {items: 2},
+                540: {items: 3},
+                768: {items: 3},
+                992: {items: 4},
+                1200: {items: 5},
+            }
+        })
+    })
+</script>
