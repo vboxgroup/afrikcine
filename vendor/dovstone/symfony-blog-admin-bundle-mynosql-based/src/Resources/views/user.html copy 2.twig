@@ -1,0 +1,261 @@
+{% extends '@DovStoneSymfonyBlogAdminBundleMyNoSQLBased/base.html.twig' %}
+
+{% import '@DovStoneSymfonyBlogAdminBundleMyNoSQLBased/partials/macros.html.twig' as bundleMacros %}
+
+{% block title %}{{ data.title }}{% endblock %}
+{% block btnAdd %}
+    {% if data.is == 'list' %}<a href="{{ data.btnAdd|raw }}" class="btn-add btn btn-primary btn-sm"><i class="fa fa-plus"></i>Ajouter</a>
+    {% endif %}
+{% endblock %}
+{% block main %}
+
+    {% if data.is == 'list' %}
+        
+        {% include '@DovStoneSymfonyBlogAdminBundleMyNoSQLBased/partials/search.html.twig' %}
+
+        <div data-loadmore-view>
+
+            {% if data.users is empty %}
+
+                {{ getBundleEmptyListView() }}
+
+            {% else %}
+
+                <div class="tiles">
+                    <div class="tile">
+                        <div class="content">
+                            <div class="table-responsive">
+
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th data-minmax="20" class="text-center">N°</th>
+                                            <th data-minmax="150" class="text-center">Actions</th>
+                                            <th data-minmax="80">Identifiant</th>
+                                            <th>Nom d'Utilisateur</th>
+                                            <th data-minmax="300">Rôles</th>
+                                            <th data-minmax="80">Mle</th>
+                                            <th data-minmax="80" class="text-center">Approbation</th>
+                                            <th data-minmax="80" class="text-center">Actif ?</th>
+                                            <th data-minmax="130" class="text-center">Création</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for u in data.users %}
+                                            {% set approved = attr(u, '_approved') %}
+                                            <tr>
+                                                <td class="text-center" data-indexify="0"></td>
+                                                <td class="text-center">
+                                                    <div class="table-actions cell-container">
+                                                        <div class="cell">
+                                                            <a data-undoable="{{ path('_deleteUser', {'id': attr(u, 'id')}) }}" data-undoable-parent="tr" title="Supprimer" class="btn btn-xs btn-danger">
+                                                                <i class="fa fa-trash"></i>
+                                                            </a>
+                                                        </div>
+                                                        {% if attr(u, '_enabled')=='off' %}
+                                                            {% set title = 'Activer le compte' %}
+                                                            {% set cls = 'warning' %}
+                                                            {% set action = 'on' %}
+                                                        {% else %}
+                                                            {% set title = 'Désactiver le compte' %}
+                                                            {% set cls = 'success' %}
+                                                            {% set action = 'off' %}
+                                                        {% endif %}
+                                                        <div class="cell">
+                                                            <a data-post-href="{{ path('_basicUpdateUser', {'id': attr(u, 'id')}) }}" data-info='{"_enabled":"{{action}}"}' title="{{ title }}" class="btn btn-xs btn-{{cls}}">
+                                                                <i class="fa fa-recycle"></i>
+                                                            </a>
+                                                        </div>
+                                                        <div class="cell">
+                                                            <a href="{{ path('_updateUser', {'id': attr(u, 'id')}) }}" title="Modifier" class="btn btn-xs btn-info">
+                                                                <i class="fa fa-pencil"></i>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>{{ attr(u, 'id') }}</td>
+                                                <td>{{ attr(u, 'username') }}</td>
+                                                <td>[ {{ attr(u, '_roles')|join(',', ' - ') }} ]</td>
+                                                <td>{{ attr(u, '_mle')|upper }}</td>
+                                                <td>
+                                                    <form action="{{ path('_basicUpdateUser', {'id':u.id}) }}" type="post" data-js="bo={submit:submitBasicUpdate}">
+                                                        <div class="pretty p-switch p-outline">
+                                                            <input
+                                                                data-js="bo={click:toggleCheckboxOnOff}"
+                                                                value="{{ approved }}"
+                                                                type="checkbox"
+                                                                {{ approved == 'on' ? 'checked' : '' }}
+                                                            >
+                                                                <div class="state">
+                                                                <label>Approuvé</label>
+                                                            </div>
+                                                            <input type="hidden" name="_approved" value="{{ approved }}">
+                                                        </div>
+                                                    </form>
+                                                </td>
+                                                <td class="text-center">
+                                                    {% if attr(u, '_enabled')=='on' %}
+                                                        <span class="badge bg-success">Actif</span>
+                                                    {% else %}
+                                                        <span class="badge bg-danger">inactif</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td class="text-center">{{ attr(u, 'createdAt')|date("d/m/Y à H:i") }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{ bundleMacros.loadMore({ 'paginator': data.paginator }) }}
+
+            {% endif %}
+                
+        </div>
+
+    {% else %}
+
+        {% set u = data.user ?? [] %}
+        {% set tab = app.request.get('tab') %}
+
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-7 offset-lg-3">
+                    
+                    <header class="user-header">
+                        <div class="user-avatar text-center"><span class="iconify" data-icon="fa-solid:user-circle" data-inline="false"></span></div>
+                        {% if u is not empty %}
+                            <div class="user-meta text-center">
+                                <h5 class="user-username">{{ attr(u, 'username') }}</h5>
+                                <p class="user-email">{{ attr(u, 'email') }}</p>
+                                <p class="user-role badge bg-success">[ {{ attr(u, '_roles')|join(',', ' - ') }} ]</p>
+                            </div>
+                        {% else %}
+                            <br>
+                        {% endif %}
+                    </header>
+
+                    {% if u is not empty %}
+                        <nav class="doc-tabs text-center">
+                            <a href="{{ path('_updateUser', {'id':attr(u, 'id')}) }}" class="{{tab=='password'?'':'active'}}">Info</a>
+                            <a href="{{ path('_updateUser', {'id':attr(u, 'id')}) }}?tab=password" class="{{tab=='password'?'active':''}}">Mot de passe</a>
+                        </nav>
+                    {% else %}
+                        <br>
+                    {% endif %}
+                    
+                    <div class="user-main">
+                        <form action="{{data.formAction}}" method="post">
+                            <div class="tiles">
+                                {% if tab == 'password' %}
+                                    <div class="tile">
+                                        <header><h3 class="title">Mot de passe</h3></header>
+                                        <div class="content">
+                                            <div class="row mg-top">
+                                                <div class="col-md-12">{{ gfWrapper("Saisissez un nouveau mot de passe", '_password', '', 'type="password" required')|raw }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <div class="tile">
+                                        <header><h3 class="title">Noms et prénoms</h3></header>
+                                        <div class="content">
+                                            <div class="row mg-top">
+                                                <div class="col-md-12">{{ gfWrapper("Nom d'utilisateur *", 'username', attr(u, 'username'), 'required')|raw }}</div>
+                                                <div class="col-md-12 mg-top">{{ gfWrapper("Nom *", 'lastname', attr(u, 'lastname'), 'required')|raw }}</div>
+                                                <div class="col-md-12 mg-top">{{ gfWrapper("Prénoms", 'firstname', attr(u, 'firstname'), '')|raw }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tile">
+                                        <header><h3 class="title">Téléphone</h3></header>
+                                        <div class="content">
+                                            <div class="row mg-top">
+                                                <div class="col-md-12">{{ gfWrapper("Email", 'email', attr(u, 'email'), 'type="email"')|raw }}</div>
+                                                <div class="col-md-12 mg-top">{{ gfWrapper("Téléphone (10 chiffres)", 'telephone', attr(u, 'telephone'), 'pattern="([0-9]+){10}"')|raw }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% if userCan('admin') %}
+
+                                        <div class="tile">
+                                            <header><h3 class="title">Rôles</h3></header>
+                                            <div class="content">
+                                                {% for r in data.roles %}
+                                                    {% set role = attr(r, 'slug') %}
+                                                    <div class="row gf-wrapper mg-top">
+                                                        <div class="col-xs-12 col-sm-4">
+                                                            <div class="pretty p-switch p-outline">
+                                                                <input
+                                                                    name="_roles[]"
+                                                                    value="{{ role }}"
+                                                                    type="checkbox" {{ userCan(role, u) ? 'checked' : ''}}
+                                                                >
+                                                                <div class="state"><label>{{ attr(r, 'title') }}</label></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-12 col-sm-8">{{ attr(r, 'description') }}</div>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+
+                                        {% set acf = getAcf() %}
+                                        <div class="tile">
+                                            <header><h3 class="title">Rubriques administrées</h3></header>
+                                            <div class="content">
+                                                <div class="row mg-top">
+                                                    
+                                                    {% for data in acf %}
+                                                        {% set acfType = attr(data, 'acfType') %}
+                                                        {% if acfType is null or acfType == 'default' %}
+                                                            <div class="col-xs-12 col-sm-4 mg-top">
+                                                                <div class="pretty p-switch p-outline">
+                                                                    <input
+                                                                        name="_acfToHandle[]"
+                                                                        value="{{ data.id }}"
+                                                                        type="checkbox" {{ data.id in attr(u, '_acfToHandle') ? 'checked' : ''}}
+                                                                    >
+                                                                    <div class="state"><label>{{ data.title }}</label></div>
+                                                                </div>
+                                                            </div>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                            
+                            <footer class="submit-wrapper">
+                                <button class="btn btn-danger" type="submit">Enregistrer</button>
+                            </footer>
+
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <style type="text/less">
+            .doc-tabs { margin: 0 }
+            .user-avatar {
+                background-color: #ccc; border-radius: 0 0 10px 10px; padding-top: 85px;
+                svg { font-size: 120px; border-radius: 100%; position: relative; top: 15px; border: 5px solid #fff; }
+            }
+            .user-meta { margin-top: 20px; }
+            .user-username { font-weight: bold; margin-bottom: 0 }
+            .user-email { font-size: 13px; margin-bottom: 10px; }
+        </style>
+
+    {% endif %}
+
+{% endblock %}

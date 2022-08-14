@@ -1,0 +1,24 @@
+{
+  "name": "dovstone/symfony-blog-admin-bundle-mynosql-based",
+  "description": "A Symfony Blog Administrator based on MyNoSQL",
+  "type": "symfony-bundle",
+  "keywords": ["dovstone","symfony","blog","admin","mynosql","nosql","mysql","database"],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "dovstone",
+      "email": "silveredovoui@gmail.com",
+      "role": "Developer"
+    }
+  ],
+  "minimum-stability":"dev",
+  "require": {
+    "php": "^7.1.3",
+    "dovstone/mynosql": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "DovStone\\Bundle\\SymfonyBlogAdminBundleMyNoSQLBased\\": "src/"
+    }
+  }
+}
