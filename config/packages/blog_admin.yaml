@@ -1,0 +1,82 @@
+parameters:
+    env(resolve:APP_PREFIX): '%env(APP_PREFIX)%'
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        public: false       # Allows optimizing the container by removing unused services; this also means
+                            # fetching services directly from the container via $container->get() won't work.
+                            # The best practice is to be explicit about your dependencies anyway.
+
+    #
+    DovStone\Bundle\SymfonyBlogAdminBundleMyNoSQLBased\:
+        resource: '@DovStoneSymfonyBlogAdminBundleMyNoSQLBased/*'
+        exclude:
+            - '@DovStoneSymfonyBlogAdminBundleMyNoSQLBased/Helpers/*'
+
+    DovStone\Bundle\SymfonyBlogAdminBundleMyNoSQLBased\DataCollector\RequestCollector:
+        tags:
+            -
+                name: data_collector
+                # must match the value returned by the getName() method
+                id: 'DovStone\Bundle\SymfonyBlogAdminBundleMyNoSQLBased\DataCollector\RequestCollector'
+                # optional template (it has more priority than the value returned by getTemplate())
+                # template: 'data_collector/template.html.twig'
+                template: 'backoffice/data_collector/template.html.twig'
+                # optional priority (positive or negative integer; default = 0)
+                # priority: 300
+        
+    service.execute_before:
+        class: App\Service\ExecuteBeforeService
+
+    _service.asset:
+        class: DovStone\Bundle\SymfonyBlogAdminBundleMyNoSQLBased\Service\AssetService
+    _service.url:
+        class: DovStone\Bundle\SymfonyBlogAdminBundleMyNoSQLBased\Service\UrlService
+    _service.dir:
+        class: DovStone\Bundle\SymfonyBlogAdminBundleMyNoSQLBased\Service\DirService
+    _service.env:
+        class: DovStone\Bundle\SymfonyBlogAdminBundleMyNoSQLBased\Service\EnvService
+    _service.mix:
+        class: DovStone\Bundle\SymfonyBlogAdminBundleMyNoSQLBased\Service\MixService
+    _service.string:
+        class: DovStone\Bundle\SymfonyBlogAdminBundleMyNoSQLBased\Service\StringService
+    _service.template:
+        class: DovStone\Bundle\SymfonyBlogAdminBundleMyNoSQLBased\Service\TemplateService
+    _service.acf:
+        class: DovStone\Bundle\SymfonyBlogAdminBundleMyNoSQLBased\Service\ACFService
+    _service.file:
+        class: DovStone\Bundle\SymfonyBlogAdminBundleMyNoSQLBased\Service\FileService
+    _service.time:
+        class: DovStone\Bundle\SymfonyBlogAdminBundleMyNoSQLBased\Service\TimeService
+    _service.crud:
+        class: DovStone\Bundle\SymfonyBlogAdminBundleMyNoSQLBased\Service\CRUDService
+    _service.execute_before:
+        class: DovStone\Bundle\SymfonyBlogAdminBundleMyNoSQLBased\Service\ExecuteBeforeService
+    _service.shortcode:
+        class: DovStone\Bundle\SymfonyBlogAdminBundleMyNoSQLBased\Service\ShortcodeService
+    _service.security:
+        class: DovStone\Bundle\SymfonyBlogAdminBundleMyNoSQLBased\Service\SecurityService
+    _service.user:
+        class: DovStone\Bundle\SymfonyBlogAdminBundleMyNoSQLBased\Service\UserService
+    _service.nav:
+        class: DovStone\Bundle\SymfonyBlogAdminBundleMyNoSQLBased\Service\NavService
+    _service.response:
+        class: DovStone\Bundle\SymfonyBlogAdminBundleMyNoSQLBased\Service\ResponseService
+    _service.log:
+        class: DovStone\Bundle\SymfonyBlogAdminBundleMyNoSQLBased\Service\LogService
+    _service.xhr:
+        class: DovStone\Bundle\SymfonyBlogAdminBundleMyNoSQLBased\Service\XHRService
+    _service.image:
+        class: DovStone\Bundle\SymfonyBlogAdminBundleMyNoSQLBased\Service\ImageService
+    _service.tpl:
+        class: DovStone\Bundle\SymfonyBlogAdminBundleMyNoSQLBased\Service\TemplateService
+
+twig:
+    paths: [
+        '%kernel.project_dir%/theme',
+        '%kernel.project_dir%/theme/backoffice',
+        '%kernel.project_dir%/vendor/dovstone/symfony-blog-admin-bundle-mynosql-based/src/Resources/views'
+    ]

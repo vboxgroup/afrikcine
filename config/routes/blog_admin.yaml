@@ -1,0 +1,4 @@
+symfony_blog_admin_bundle_mynosql_based:
+    resource: '@DovStoneSymfonyBlogAdminBundleMyNoSQLBased/Controller/'
+    prefix: afrikcine.com
+    type: annotation
