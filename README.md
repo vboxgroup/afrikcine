@@ -1,3 +1,3 @@
 # afrikcine
 Première plateforme web du cinéma africain<br />
-[https://africine.silveredovoui.com](https://afrikcine.silveredovoui.com)
+<a href="https://afrikcine.silveredovoui.com" target="_blank">afrikcine.silveredovoui.com</a>
